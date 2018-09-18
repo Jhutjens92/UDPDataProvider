@@ -1,12 +1,12 @@
 ﻿using System;
 ﻿using UDPDataProvider.Model;
-using UDPDataProvider.UDPManager;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using UDPDataProvider.UDPManager;
 using static UDPDataProvider.UDPManager.UDPDataManager;
 
 namespace UDPDataProvider.ViewModel

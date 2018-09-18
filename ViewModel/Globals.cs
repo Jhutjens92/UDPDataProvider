@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MQTTDataProvider.ViewModel
+﻿namespace UDPDataProvider.ViewModel
 {
     public static class Globals
     {
-        private static bool _isRecordingMqtt = false;
-        public static bool IsRecordingMqtt
+        private static bool _isRecordingUDP = false;
+        public static bool IsRecordingUDP
         {
-            get { return _isRecordingMqtt; }
+            get { return _isRecordingUDP; }
             set
             {
-                _isRecordingMqtt = value;
+                _isRecordingUDP = value;
             }
         }
     }
