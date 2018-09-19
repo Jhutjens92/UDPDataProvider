@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using uPLibrary.Networking.M2Mqtt;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace UDPDataProvider.UDPManager
 {
     class UDPDataManager
     {
-
-        MqttClient client;
-        private string clientId;
         private string ReceivedMessage;             //string containing the UDP published message
-        private string BrokerAddress;               //default MQTT server value for WEKIT
         private const int UDPServerPort = 5005;
 
         public event EventHandler<TextReceivedEventArgs> NewUDPTextReceived;
@@ -27,31 +22,15 @@ namespace UDPDataProvider.UDPManager
 
             }
         }
-
-        public static int UDPServerListen()
+        
+        public void UDPServerStart()
         {
-            bool done = false;
-            UdpClient listener = new UdpClient(UDPServerPort);
-            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, UDPServerPort);
-            string Received_Data;
-            byte[] Receive_Byte_Array;
-            try
-            {
-                while (!done)
-                {
-                    Receive_Byte_Array = listener.Receive(ref groupEP);
-                    Received_Data = Encoding.ASCII.GetString(Receive_Byte_Array, 0, Receive_Byte_Array.Length);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-            listener.Close();
-            return 0;
+            Console.WriteLine("test");
         }
 
-    protected virtual void OnUDPReceived(TextReceivedEventArgs e)
+
+
+        protected virtual void OnUDPReceived(TextReceivedEventArgs e)
         {
             EventHandler<TextReceivedEventArgs> handler = NewUDPTextReceived;
             if(handler != null)
@@ -67,17 +46,7 @@ namespace UDPDataProvider.UDPManager
         }
 
 
-        public UDPDataManager()
-        {
-            //INIT Var Values//
-            BrokerAddress = "localhost";
-            //MQTT Functions//
-            clientId = Guid.NewGuid().ToString();
-            client.Connect(clientId);
-        }
-
-
-        #region Methods
+         #region Methods
 
         //if (Globals.IsRecordingUDP == true)
         //{

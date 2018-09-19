@@ -415,6 +415,7 @@ namespace UDPDataProvider.ViewModel
             SetValueNames();
         }
 
+
         private void MyConnector_stopRecordingEvent(object sender)
         {
             Application.Current.Dispatcher.BeginInvoke(
@@ -446,10 +447,17 @@ namespace UDPDataProvider.ViewModel
             get 
                 {
                 _buttonClicked = new RelayCommand(
-                    param => this.StartRecordingData(), null
+                    param => this.ExecuteNeededFunctions(), null
                     );
                 return _buttonClicked;
             }
+        }
+
+        public void ExecuteNeededFunctions()
+        {
+            StartRecordingData();
+            udpmanager.UDPServerStart();
+
         }
 
         public void StartRecordingData()
