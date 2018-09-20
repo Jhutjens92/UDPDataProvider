@@ -16,6 +16,8 @@ namespace UDPDataProvider.ViewModel
         UDPDataManager udpmanager = new UDPDataManager();
 
         #region Vars & Properties
+        private bool running;
+        private bool finished_Recording;
         private string _imu1_AccX = "";
         public String imu1_AccX
         {
@@ -320,7 +322,7 @@ namespace UDPDataProvider.ViewModel
 
         public MainWindowViewModel()
         {
-            udpmanager.newUDPTextReceived += OnNewMqttReceived;
+            udpmanager.newUDPTextReceived += newUDPTextReceived;
             HubConnector.StartConnection();
             HubConnector.MyConnector.startRecordingEvent += MyConnector_startRecordingEvent;
             HubConnector.MyConnector.stopRecordingEvent += MyConnector_stopRecordingEvent;
@@ -330,25 +332,29 @@ namespace UDPDataProvider.ViewModel
 
         private void MyConnector_stopRecordingEvent(object sender)
         {
+            running = true;
+            finished_Recording = true;
             Application.Current.Dispatcher.BeginInvoke(
                 DispatcherPriority.Background,
                 new Action(() => {
-                this.StartRecordingData();
+                this.ExecuteButtonFuctions();
             }));
         }
 
         private void MyConnector_startRecordingEvent(object sender)
         {
+            running = false;
             Application.Current.Dispatcher.BeginInvoke(
                  DispatcherPriority.Background,
                  new Action(() => {
-                 this.StartRecordingData();
+                 this.ExecuteButtonFuctions();
             }));
         }
 
-        private void OnNewMqttReceived(object sender, TextReceivedEventArgs e)
+        private void newUDPTextReceived(object sender, TextReceivedEventArgs e)
         {
             TextReceived = e.TextReceived;
+            SendData();
         }
 
         #region events
@@ -359,18 +365,27 @@ namespace UDPDataProvider.ViewModel
             get 
                 {
                 _buttonClicked = new RelayCommand(
-                    param => this.ExecuteNeededFunctions(), null
+                    param => this.ExecuteButtonFuctions(), null
                     );
                 return _buttonClicked;
             }
         }
 
-        public void ExecuteNeededFunctions()
+        public void ExecuteButtonFuctions()
         {
-            StartRecordingData();
-            udpmanager.UDPServerStart();
+            if (running == true)
+            {
+                StartRecordingData();
+                udpmanager.UDPServerStop();
+            }
 
+            else if (running == false && finished_Recording == false)
+            {
+                StartRecordingData();
+                udpmanager.UDPServerStart();
+            }
         }
+     
 
         public void StartRecordingData()
         {

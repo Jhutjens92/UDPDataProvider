@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Windows;
+using UDPDataProvider.ViewModel;
 
 namespace UDPDataProvider.UDPManager
 {
@@ -48,22 +49,41 @@ namespace UDPDataProvider.UDPManager
 
         private void UDPServerCallback(IAsyncResult res)
         {
-            IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, udpServerPort);
-            received_Data = server.EndReceive(res, ref RemoteIpEndPoint);
-            receivedMessage = Encoding.UTF8.GetString(received_Data);
-            //Process codes
-            TextReceivedEventArgs args = new TextReceivedEventArgs();
-            args.TextReceived = receivedMessage;
-            OnUDPReceived(args);
-            Publish_Data();
-            server.BeginReceive(new AsyncCallback(UDPServerCallback), null);
+            if (Globals.IsRecordingUDP == true)
+            {
+                IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, udpServerPort);
+                received_Data = server.EndReceive(res, ref RemoteIpEndPoint);
+                receivedMessage = Encoding.UTF8.GetString(received_Data);
+                //Process codes
+                TextReceivedEventArgs args = new TextReceivedEventArgs();
+                args.TextReceived = receivedMessage;
+                OnUDPReceived(args);
+                Publish_Data();
+                server.BeginReceive(new AsyncCallback(UDPServerCallback), null);
+            }
         }
+
 
         public void UDPServerStart()
         {
+            if (Globals.IsRecordingUDP == true)
+                {
+                try
+                {
+                    server.BeginReceive(new AsyncCallback(UDPServerCallback), null);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+        }
+
+        public void UDPServerStop()
+        {
             try
             {
-                server.BeginReceive(new AsyncCallback(UDPServerCallback), null);
+                server.Close();
             }
             catch (Exception e)
             {
@@ -72,7 +92,7 @@ namespace UDPDataProvider.UDPManager
 
         }
 
-         #region Methods
+        #region Methods
 
         //if (Globals.IsRecordingUDP == true)
         //{
