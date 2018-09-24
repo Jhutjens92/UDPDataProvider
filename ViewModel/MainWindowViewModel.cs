@@ -16,269 +16,356 @@ namespace UDPDataProvider.ViewModel
         UDPDataManager udpmanager = new UDPDataManager();
 
         #region Vars & Properties
-        private bool running;
-        private bool finished_Recording;
-        private string _imu1_AccX = "";
-        public String imu1_AccX
+   
+        private string _IMU1_AccX = "";
+        public String IMU1_AccX
         {
-            get { return _imu1_AccX; }
+            get { return _IMU1_AccX; }
             set
             {
-                _imu1_AccX = value;
-                OnPropertyChanged("imu1_AccX");
+                _IMU1_AccX = value;
+                OnPropertyChanged("IMU1_AccX");
             }
         }
 
-        private string _imu1_AccY= "";
-        public String imu1_AccY
+        private string _IMU1_AccY = "";
+        public String IMU1_AccY
         {
-            get { return _imu1_AccY; }
+            get { return _IMU1_AccY; }
             set
             {
-                _imu1_AccY = value;
-                OnPropertyChanged("imu1_AccY");
+                _IMU1_AccY = value;
+                OnPropertyChanged("IMU1_AccY");
             }
         }
 
-        private string _imu1_AccZ= "";
-        public String imu1_AccZ
+        private string _IMU1_AccZ = "";
+        public String IMU1_AccZ
         {
-            get { return _imu1_AccZ; }
+            get { return _IMU1_AccZ; }
             set
             {
-                _imu1_AccZ = value;
-                OnPropertyChanged("imu1_AccZ");
+                _IMU1_AccZ = value;
+                OnPropertyChanged("IMU1_AccZ");
             }
         }
 
-        private string _imu1_GyroX = "";
-        public String imu1_GyroX
+        private string _IMU1_GyroX = "";
+        public String IMU1_GyroX
         {
-            get { return _imu1_GyroX; }
+            get { return _IMU1_GyroX; }
             set
             {
-                _imu1_GyroX = value;
-                OnPropertyChanged("imu1_GyroX");
+                _IMU1_GyroX = value;
+                OnPropertyChanged("IMU1_GyroX");
             }
         }
 
-        private string _imu1_GyroY= "";
-        public String imu1_GyroY
+        private string _IMU1_GyroY = "";
+        public String IMU1_GyroY
         {
-            get { return _imu1_GyroY; }
+            get { return _IMU1_GyroY; }
             set
             {
-                _imu1_GyroY = value;
-                OnPropertyChanged("imu1_GyroY");
+                _IMU1_GyroY = value;
+                OnPropertyChanged("IMU1_GyroY");
             }
         }
 
-        private string _imu1_GyroZ= "";
-        public String imu1_GyroZ
+        private string _IMU1_GyroZ = "";
+        public String IMU1_GyroZ
         {
-            get { return _imu1_GyroZ; }
+            get { return _IMU1_GyroZ; }
             set
             {
-                _imu1_GyroZ = value;
-                OnPropertyChanged("imu1_GyroZ");
+                _IMU1_GyroZ = value;
+                OnPropertyChanged("IMU1_GyroZ");
             }
         }
 
-        private string _imu1_MagX= "";
-        public String imu1_MagX
+        private string _IMU1_MagX = "";
+        public String IMU1_MagX
         {
-            get { return _imu1_MagX; }
+            get { return _IMU1_MagX; }
             set
             {
-                _imu1_MagX = value;
-                OnPropertyChanged("imu1_MagX");
+                _IMU1_MagX = value;
+                OnPropertyChanged("IMU1_MagX");
             }
         }
 
-        private string _imu1_MagY= "";
-        public String imu1_MagY
+        private string _IMU1_MagY = "";
+        public String IMU1_MagY
         {
-            get { return _imu1_MagY; }
+            get { return _IMU1_MagY; }
             set
             {
-                _imu1_MagY = value;
-                OnPropertyChanged("imu1_MagY");
+                _IMU1_MagY = value;
+                OnPropertyChanged("IMU1_MagY");
             }
         }
 
-        private string _imu1_MagZ= "";
-        public String imu1_MagZ
+        private string _IMU1_MagZ = "";
+        public String IMU1_MagZ
         {
-            get { return _imu1_MagZ; }
+            get { return _IMU1_MagZ; }
             set
             {
-                _imu1_MagZ = value;
-                OnPropertyChanged("imu1_MagZ");
+                _IMU1_MagZ = value;
+                OnPropertyChanged("IMU1_MagZ");
             }
         }
 
-        private string _imu2_AccX = "";
-        public String imu2_AccX
+        private string _IMU1_Q0 = "";
+        public String IMU1_Q0
         {
-            get { return _imu2_AccX; }
+            get { return _IMU1_Q0; }
             set
             {
-                _imu2_AccX = value;
-                OnPropertyChanged("imu2_AccX");
+                _IMU1_Q0 = value;
+                OnPropertyChanged("IMU1_Q0");
             }
         }
 
-        private string _imu2_AccY = "";
-        public String imu2_AccY
+        private string _IMU1_Q1 = "";
+        public String IMU1_Q1
         {
-            get { return _imu2_AccY; }
+            get { return _IMU1_Q1; }
             set
             {
-                _imu2_AccY = value;
-                OnPropertyChanged("imu2_AccY");
+                _IMU1_Q1 = value;
+                OnPropertyChanged("IMU1_Q1");
             }
         }
 
-        private string _imu2_AccZ = "";
-        public String imu2_AccZ
+        private string _IMU1_Q2 = "";
+        public String IMU1_Q2
         {
-            get { return _imu2_AccZ; }
+            get { return _IMU1_Q2; }
             set
             {
-                _imu2_AccZ = value;
-                OnPropertyChanged("imu2_AccZ");
+                _IMU1_Q2 = value;
+                OnPropertyChanged("IMU1_Q2");
             }
         }
 
-        private string _imu2_GyroX = "";
-        public String imu2_GyroX
+        private string _IMU1_Q3 = "";
+        public String IMU1_Q3
         {
-            get { return _imu2_GyroX; }
+            get { return _IMU1_Q3; }
             set
             {
-                _imu2_GyroX = value;
-                OnPropertyChanged("imu2_GyroX");
+                _IMU1_Q3 = value;
+                OnPropertyChanged("IMU1_Q3");
             }
         }
 
-        private string _imu2_GyroY = "";
-        public String imu2_GyroY
+        private string _IMU2_AccX = "";
+        public String IMU2_AccX
         {
-            get { return _imu2_GyroY; }
+            get { return _IMU2_AccX; }
             set
             {
-                _imu2_GyroY = value;
-                OnPropertyChanged("imu2_GyroY");
+                _IMU2_AccX = value;
+                OnPropertyChanged("IMU2_AccX");
             }
         }
 
-        private string _imu2_GyroZ = "";
-        public String imu2_GyroZ
+        private string _IMU2_AccY = "";
+        public String IMU2_AccY
         {
-            get { return _imu2_GyroZ; }
+            get { return _IMU2_AccY; }
             set
             {
-                _imu2_GyroZ = value;
-                OnPropertyChanged("imu2_GyroZ");
+                _IMU2_AccY = value;
+                OnPropertyChanged("IMU2_AccY");
             }
         }
 
-        private string _imu2_MagX = "";
-        public String imu2_MagX
+        private string _IMU2_AccZ = "";
+        public String IMU2_AccZ
         {
-            get { return _imu2_MagX; }
+            get { return _IMU2_AccZ; }
             set
             {
-                _imu2_MagX = value;
-                OnPropertyChanged("imu2_MagX");
+                _IMU2_AccZ = value;
+                OnPropertyChanged("IMU2_AccZ");
             }
         }
 
-        private string _imu2_MagY = "";
-        public String imu2_MagY
+        private string _IMU2_GyroX = "";
+        public String IMU2_GyroX
         {
-            get { return _imu2_MagY; }
+            get { return _IMU2_GyroX; }
             set
             {
-                _imu2_MagY = value;
-                OnPropertyChanged("imu2_MagY");
+                _IMU2_GyroX = value;
+                OnPropertyChanged("IMU2_GyroX");
             }
         }
 
-        private string _imu2_MagZ = "";
-        public String imu2_MagZ
+        private string _IMU2_GyroY = "";
+        public String IMU2_GyroY
         {
-            get { return _imu2_MagZ; }
+            get { return _IMU2_GyroY; }
             set
             {
-                _imu2_MagZ = value;
-                OnPropertyChanged("imu2_MagZ");
+                _IMU2_GyroY = value;
+                OnPropertyChanged("IMU2_GyroY");
             }
         }
 
-        private string _temp_External= "";
-        public String temp_External
+        private string _IMU2_GyroZ = "";
+        public String IMU2_GyroZ
         {
-            get { return _temp_External; }
+            get { return _IMU2_GyroZ; }
             set
             {
-                _temp_External = value;
-                OnPropertyChanged("temp_External");
+                _IMU2_GyroZ = value;
+                OnPropertyChanged("IMU2_GyroZ");
             }
         }
 
-        private string _humidity_External= "";
-        public String humidity_External
+        private string _IMU2_MagX = "";
+        public String IMU2_MagX
         {
-            get { return _humidity_External; }
+            get { return _IMU2_MagX; }
             set
             {
-                _humidity_External = value;
-                OnPropertyChanged("humidity_External");
+                _IMU2_MagX = value;
+                OnPropertyChanged("IMU2_MagX");
             }
         }
 
-        private string _temp_Internal= "";
-        public String temp_Internal
+        private string _IMU2_MagY = "";
+        public String IMU2_MagY
         {
-            get { return _temp_Internal; }
+            get { return _IMU2_MagY; }
             set
             {
-                _temp_Internal = value;
-                OnPropertyChanged("temp_Internal");
+                _IMU2_MagY = value;
+                OnPropertyChanged("IMU2_MagY");
             }
         }
 
-        private string _humidity_Internal= "";
-        public String humidity_Internal
+        private string _IMU2_MagZ = "";
+        public String IMU2_MagZ
         {
-            get { return _humidity_Internal; }
+            get { return _IMU2_MagZ; }
             set
             {
-                _humidity_Internal = value;
-                OnPropertyChanged("humidity_Internal");
+                _IMU2_MagZ = value;
+                OnPropertyChanged("IMU2_MagZ");
             }
         }
 
-        private string _pulse_TempLobe= "";
-        public String pulse_TempLobe
+        private string _IMU2_Q0 = "";
+        public String IMU2_Q0
         {
-            get { return _pulse_TempLobe; }
+            get { return _IMU2_Q0; }
             set
             {
-                _pulse_TempLobe = value;
-                OnPropertyChanged("pulse_TempLobe");
+                _IMU2_Q0 = value;
+                OnPropertyChanged("IMU2_Q0");
             }
         }
 
-        private string _gsr = ""; 
-        public String gsr
+        private string _IMU2_Q1 = "";
+        public String IMU2_Q1
         {
-            get { return _gsr; }
+            get { return _IMU2_Q1; }
             set
             {
-                _gsr = value;
-                OnPropertyChanged("gsr");
+                _IMU2_Q1 = value;
+                OnPropertyChanged("IMU2_Q1");
+            }
+        }
+
+        private string _IMU2_Q2 = "";
+        public String IMU2_Q2
+        {
+            get { return _IMU2_Q2; }
+            set
+            {
+                _IMU2_Q2 = value;
+                OnPropertyChanged("IMU2_Q2");
+            }
+        }
+
+        private string _IMU2_Q3 = "";
+        public String IMU2_Q3
+        {
+            get { return _IMU2_Q3; }
+            set
+            {
+                _IMU2_Q3 = value;
+                OnPropertyChanged("IMU2_Q3");
+            }
+        }
+
+        private string _Temp_External = "";
+        public String Temp_External
+        {
+            get { return _Temp_External; }
+            set
+            {
+                _Temp_External = value;
+                OnPropertyChanged("Temp_External");
+            }
+        }
+
+        private string _Humidity_External = "";
+        public String Humidity_External
+        {
+            get { return _Humidity_External; }
+            set
+            {
+                _Humidity_External = value;
+                OnPropertyChanged("Humidity_External");
+            }
+        }
+
+        private string _Temp_Internal = "";
+        public String Temp_Internal
+        {
+            get { return _Temp_Internal; }
+            set
+            {
+                _Temp_Internal = value;
+                OnPropertyChanged("Temp_Internal");
+            }
+        }
+
+        private string _Humidity_Internal = "";
+        public String Humidity_Internal
+        {
+            get { return _Humidity_Internal; }
+            set
+            {
+                _Humidity_Internal = value;
+                OnPropertyChanged("Humidity_Internal");
+            }
+        }
+
+        private string _Pulse_TempLobe = "";
+        public String Pulse_TempLobe
+        {
+            get { return _Pulse_TempLobe; }
+            set
+            {
+                _Pulse_TempLobe = value;
+                OnPropertyChanged("Pulse_TempLobe");
+            }
+        }
+
+        private string _GSR = "";
+        public String GSR
+        {
+            get { return _GSR; }
+            set
+            {
+                _GSR = value;
+                OnPropertyChanged("GSR");
             }
         }
 
@@ -322,7 +409,7 @@ namespace UDPDataProvider.ViewModel
 
         public MainWindowViewModel()
         {
-            udpmanager.newUDPTextReceived += newUDPTextReceived;
+            udpmanager.NewUDPTextReceived += NewUDPTextReceived;
             HubConnector.StartConnection();
             HubConnector.MyConnector.startRecordingEvent += MyConnector_startRecordingEvent;
             HubConnector.MyConnector.stopRecordingEvent += MyConnector_stopRecordingEvent;
@@ -332,31 +419,59 @@ namespace UDPDataProvider.ViewModel
 
         private void MyConnector_stopRecordingEvent(object sender)
         {
-            running = true;
-            finished_Recording = true;
             Application.Current.Dispatcher.BeginInvoke(
                 DispatcherPriority.Background,
                 new Action(() => {
-                this.ExecuteButtonFuctions();
+                this.StartRecordingData();
             }));
         }
 
         private void MyConnector_startRecordingEvent(object sender)
         {
-            running = false;
             Application.Current.Dispatcher.BeginInvoke(
                  DispatcherPriority.Background,
                  new Action(() => {
-                 this.ExecuteButtonFuctions();
+                 this.StartRecordingData();
             }));
         }
 
-        private void newUDPTextReceived(object sender, TextReceivedEventArgs e)
+        private void NewUDPTextReceived(object sender, TextReceivedEventArgs e)
         {
             TextReceived = e.TextReceived;
+            IMU1_AccX = e.IMU1_AccX;
+            IMU1_AccY = e.IMU1_AccY;
+            IMU1_AccZ = e.IMU1_AccZ;
+            IMU1_GyroX = e.IMU1_GyroX;
+            IMU1_GyroY = e.IMU1_GyroY;
+            IMU1_GyroZ = e.IMU1_GyroZ;
+            IMU1_MagX = e.IMU1_MagX;
+            IMU1_MagY = e.IMU1_MagY;
+            IMU1_MagZ = e.IMU1_MagZ;
+            IMU1_Q0 = e.IMU1_Q0;
+            IMU1_Q1 = e.IMU1_Q1;
+            IMU1_Q2 = e.IMU1_Q2;
+            IMU1_Q3 = e.IMU1_Q3;
+            IMU2_AccX = e.IMU2_AccX;
+            IMU2_AccY = e.IMU2_AccY;
+            IMU2_AccZ = e.IMU2_AccZ;
+            IMU2_GyroX = e.IMU2_GyroX;
+            IMU2_GyroY = e.IMU2_GyroY;
+            IMU2_GyroZ = e.IMU2_GyroZ;
+            IMU2_MagX = e.IMU2_MagX;
+            IMU2_MagY = e.IMU2_MagY;
+            IMU2_MagZ = e.IMU2_MagZ;
+            IMU2_Q0 = e.IMU2_Q0;
+            IMU2_Q1 = e.IMU2_Q1;
+            IMU2_Q2 = e.IMU2_Q2;
+            IMU2_Q3 = e.IMU2_Q3;
+            Temp_External = e.Temp_Ext;
+            Humidity_External = e.Humidity_Ext;
+            Temp_Internal = e.Temp_Int;
+            Humidity_Internal = e.Humidity_Int;
+            Pulse_TempLobe = e.Pulse_TempLobe;
+            GSR = e.GSR;
             SendData();
         }
-
         #region events
         private ICommand _buttonClicked;
 
@@ -365,27 +480,11 @@ namespace UDPDataProvider.ViewModel
             get 
                 {
                 _buttonClicked = new RelayCommand(
-                    param => this.ExecuteButtonFuctions(), null
+                    param => this.StartRecordingData(), null
                     );
                 return _buttonClicked;
             }
         }
-
-        public void ExecuteButtonFuctions()
-        {
-            if (running == true)
-            {
-                StartRecordingData();
-                udpmanager.UDPServerStop();
-            }
-
-            else if (running == false && finished_Recording == false)
-            {
-                StartRecordingData();
-                udpmanager.UDPServerStart();
-            }
-        }
-     
 
         public void StartRecordingData()
         {
@@ -394,6 +493,7 @@ namespace UDPDataProvider.ViewModel
                 Globals.IsRecordingUDP = true;
                 ButtonText = "Stop Recording";
                 ButtonColor = new SolidColorBrush(Colors.Green);
+                udpmanager.UDPServerStart();
 
             }
             else if (Globals.IsRecordingUDP == true)
@@ -401,39 +501,51 @@ namespace UDPDataProvider.ViewModel
                 Globals.IsRecordingUDP = false;
                 ButtonText = "Start Recording";
                 ButtonColor = new SolidColorBrush(Colors.White);
+                udpmanager.UDPServerStop();
             }
                 
         }
         #endregion
 
         #region LearningHubMethods
+
         public void SetValueNames()
         {
-            var names = new List<string>();
-            names.Add("imu1_AccX");
-            names.Add("imu1_AccY");
-            names.Add("imu1_AccZ");
-            names.Add("imu1_GyroX");
-            names.Add("imu1_GyroY");
-            names.Add("imu1_GyroZ");
-            names.Add("imu1_MagX");
-            names.Add("imu1_MagY");
-            names.Add("imu1_MagZ");
-            names.Add("imu2_AccX");
-            names.Add("imu2_AccY");
-            names.Add("imu2_AccZ");
-            names.Add("imu2_GyroX");
-            names.Add("imu2_GyroY");
-            names.Add("imu2_GyroZ");
-            names.Add("imu2_MagX");
-            names.Add("imu2_MagY");
-            names.Add("imu2_MagZ");
-            names.Add("Temp_Ext");
-            names.Add("Humidity_Ext");
-            names.Add("Temp_Int");
-            names.Add("Humidity_Int");
-            names.Add("Pulse_TempLobe");
-            names.Add("GSR");
+            var names = new List<string>
+            {
+                "IMU1_AccX",
+                "IMU1_AccY",
+                "IMU1_AccZ",
+                "IMU1_GyroX",
+                "IMU1_GyroY",
+                "IMU1_GyroZ",
+                "IMU1_MagX",
+                "IMU1_MagY",
+                "IMU1_MagZ",
+                "IMU1_Q0",
+                "IMU1_Q1",
+                "IMU1_Q2",
+                "IMU1_Q3",
+                "IMU2_AccX",
+                "IMU2_AccY",
+                "IMU2_AccZ",
+                "IMU2_GyroX",
+                "IMU2_GyroY",
+                "IMU2_GyroZ",
+                "IMU2_MagX",
+                "IMU2_MagY",
+                "IMU2_MagZ",
+                "IMU2_Q0",
+                "IMU2_Q1",
+                "IMU2_Q2",
+                "IMU2_Q3",
+                "Temp_Ext",
+                "Humidity_Ext",
+                "Temp_Int",
+                "Humidity_Int",
+                "Pulse_TempLobe",
+                "GSR"
+            };
             HubConnector.SetValuesName(names);
 
         }
@@ -442,31 +554,41 @@ namespace UDPDataProvider.ViewModel
         {
             try
             {
-                var values = new List<string>();
-                values.Add(imu1_AccX);
-                values.Add(imu1_AccY);
-                values.Add(imu1_AccZ);
-                values.Add(imu1_GyroX);
-                values.Add(imu1_GyroY);
-                values.Add(imu1_GyroZ);
-                values.Add(imu1_MagX);
-                values.Add(imu1_MagY);
-                values.Add(imu1_MagZ);
-                values.Add(imu2_AccX);
-                values.Add(imu2_AccY);
-                values.Add(imu2_AccZ);
-                values.Add(imu2_GyroX);
-                values.Add(imu2_GyroY);
-                values.Add(imu2_GyroZ);
-                values.Add(imu2_MagX);
-                values.Add(imu2_MagY);
-                values.Add(imu2_MagZ);
-                values.Add(temp_External);
-                values.Add(humidity_External);
-                values.Add(temp_Internal);
-                values.Add(humidity_Internal);
-                values.Add(pulse_TempLobe);
-                values.Add(gsr);
+                var values = new List<string>
+                {
+                    IMU1_AccX,
+                    IMU1_AccY,
+                    IMU1_AccZ,
+                    IMU1_GyroX,
+                    IMU1_GyroY,
+                    IMU1_GyroZ,
+                    IMU1_MagX,
+                    IMU1_MagY,
+                    IMU1_MagZ,
+                    IMU1_Q0,
+                    IMU1_Q1,
+                    IMU1_Q2,
+                    IMU1_Q3,
+                    IMU2_AccX,
+                    IMU2_AccY,
+                    IMU2_AccZ,
+                    IMU2_GyroX,
+                    IMU2_GyroY,
+                    IMU2_GyroZ,
+                    IMU2_MagX,
+                    IMU2_MagY,
+                    IMU2_MagZ,
+                    IMU2_Q0,
+                    IMU2_Q1,
+                    IMU2_Q2,
+                    IMU2_Q3,
+                    Temp_External,
+                    Humidity_External,
+                    Temp_Internal,
+                    Humidity_Internal,
+                    Pulse_TempLobe,
+                    GSR
+                };
                 HubConnector.SendData(values);
             }
             catch (Exception ex)
