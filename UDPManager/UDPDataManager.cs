@@ -39,6 +39,7 @@ namespace UDPDataProvider.UDPManager
         public class TextReceivedEventArgs : EventArgs
         {
             public string TextReceived { get; set; }
+            public string ESP_TimeStamp { get; set;}
             public string IMU1_AccX { get; set; }
             public string IMU1_AccY { get; set; }
             public string IMU1_AccZ { get; set; }
@@ -122,6 +123,7 @@ namespace UDPDataProvider.UDPManager
             TextReceivedEventArgs args = new TextReceivedEventArgs
             {
                 TextReceived = ReceivedMessage,
+                ESP_TimeStamp = Parsed_ReceivedMessage.time,
                 IMU1_AccX = Parsed_ReceivedMessage.imus[0].ax,
                 IMU1_AccY = Parsed_ReceivedMessage.imus[0].ay,
                 IMU1_AccZ = Parsed_ReceivedMessage.imus[0].az,

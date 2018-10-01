@@ -16,7 +16,18 @@ namespace UDPDataProvider.ViewModel
         UDPDataManager udpmanager = new UDPDataManager();
 
         #region Vars & Properties
-   
+
+        private string _ESP_TimeStamp = "";
+        public String ESP_TimeStamp
+        {
+            get { return _ESP_TimeStamp; }
+            set
+            {
+                _ESP_TimeStamp = value;
+                OnPropertyChanged("ESP_TimeStamp");
+            }
+        }
+
         private string _IMU1_AccX = "";
         public String IMU1_AccX
         {
