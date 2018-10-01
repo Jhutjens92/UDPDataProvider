@@ -13,21 +13,33 @@ namespace UDPDataProvider.UDPManager
 {
     class UDPDataManager
     {
+        #region Instances
+        UdpClient server = new UdpClient(udpServerPort);
+        #endregion
+
+        #region Vars
+
         //bytearray containing the received UDP message
         byte[] Received_Data;
+
         //string containing converted byte array Received_Data
         string ReceivedMessage;
+
         //JSON Parser MQTT message
         dynamic Parsed_ReceivedMessage;
 
+        // default UDPServerPort value
         private const int udpServerPort = 5005;
+
+        // default UDPClientPort value
         private const int udpVTTPlayerPort = 5006;
-        UdpClient server = new UdpClient(udpServerPort);
 
         //string containing the IP address of the VTT Player
         readonly string VttPlayerAddress = "127.0.0.1";
-       
 
+        #endregion
+
+        #region EventHandlers
 
         public event EventHandler<TextReceivedEventArgs> NewUDPTextReceived;
 
@@ -39,7 +51,7 @@ namespace UDPDataProvider.UDPManager
         public class TextReceivedEventArgs : EventArgs
         {
             public string TextReceived { get; set; }
-            public string ESP_TimeStamp { get; set;}
+            public string ESP_TimeStamp { get; set; }
             public string IMU1_AccX { get; set; }
             public string IMU1_AccY { get; set; }
             public string IMU1_AccZ { get; set; }
@@ -74,7 +86,10 @@ namespace UDPDataProvider.UDPManager
             public string GSR { get; set; }
         }
 
-
+        #endregion
+                
+        #region Methods
+        // Async function running the UDP Server. 
         private void UDPServerCallback(IAsyncResult res)
         {
             if (Globals.IsRecordingUDP == true)
@@ -89,11 +104,11 @@ namespace UDPDataProvider.UDPManager
             }
         }
 
-
+        // This function starts a new UDP Server at the start of the program
         public void UDPServerStart()
         {
             if (Globals.IsRecordingUDP == true)
-                {
+            {
                 try
                 {
                     server.BeginReceive(new AsyncCallback(UDPServerCallback), null);
@@ -105,6 +120,7 @@ namespace UDPDataProvider.UDPManager
             }
         }
 
+        // Stops the UDP Server at the end of a recording
         public void UDPServerStop()
         {
             try
@@ -117,7 +133,7 @@ namespace UDPDataProvider.UDPManager
             }
 
         }
-
+        // this function sets all the variables to the received values
         void UpdateValues()
         {
             TextReceivedEventArgs args = new TextReceivedEventArgs
@@ -159,21 +175,18 @@ namespace UDPDataProvider.UDPManager
             };
             OnUDPReceived(args);
         }
-
+        // this function is used to parse MQTT JSON String
         void JSONParse_ReceivedMessage()
         {
 
             Parsed_ReceivedMessage = JObject.Parse(ReceivedMessage);
-                       
+
         }
 
 
-
-        #region Methods
-
         #endregion
 
-        #region MQTT
+        #region UDP
         // this code runs when UDP data is received. It sends the unfiltered string directly to the VTT Player.
         private void Publish_Data()
         {
@@ -201,7 +214,7 @@ namespace UDPDataProvider.UDPManager
                 exception_thrown = false;
                 Console.WriteLine("The exception indicates the message was not sent.");
             }
-        } // end of main()
+        }
         #endregion
     }
 }

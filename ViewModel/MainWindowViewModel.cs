@@ -449,6 +449,7 @@ namespace UDPDataProvider.ViewModel
         private void NewUDPTextReceived(object sender, TextReceivedEventArgs e)
         {
             TextReceived = e.TextReceived;
+            ESP_TimeStamp = e.ESP_TimeStamp;
             IMU1_AccX = e.IMU1_AccX;
             IMU1_AccY = e.IMU1_AccY;
             IMU1_AccZ = e.IMU1_AccZ;
@@ -524,6 +525,7 @@ namespace UDPDataProvider.ViewModel
         {
             var names = new List<string>
             {
+                "ESP_TimeStap",
                 "IMU1_AccX",
                 "IMU1_AccY",
                 "IMU1_AccZ",
