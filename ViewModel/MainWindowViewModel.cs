@@ -500,22 +500,24 @@ namespace UDPDataProvider.ViewModel
 
         public void StartRecordingData()
         {
-            if (Globals.IsRecordingUDP == false)
+            if (Globals.IsRecordingMqtt == false)
             {
-                Globals.IsRecordingUDP = true;
+                Globals.IsRecordingMqtt = true;
+                Globals.IsRecordingDone = true;
                 ButtonText = "Stop Recording";
                 ButtonColor = new SolidColorBrush(Colors.Green);
-                udpmanager.UDPServerStart();
-
             }
-            else if (Globals.IsRecordingUDP == true)
+            else if (Globals.IsRecordingMqtt == true)
             {
-                Globals.IsRecordingUDP = false;
+                Globals.IsRecordingMqtt = false;
                 ButtonText = "Start Recording";
                 ButtonColor = new SolidColorBrush(Colors.White);
-                udpmanager.UDPServerStop();
+                if (Globals.IsRecordingDone == true)
+                {
+                    Application.Current.Shutdown();
+                    Environment.Exit(0);
+                }
             }
-                
         }
         #endregion
 

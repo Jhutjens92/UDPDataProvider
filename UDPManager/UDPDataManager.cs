@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using UDPDataProvider.ViewModel;
+using uPLibrary.Networking.M2Mqtt;
+using uPLibrary.Networking.M2Mqtt.Messages;
 
 namespace UDPDataProvider.UDPManager
 {
@@ -15,6 +17,7 @@ namespace UDPDataProvider.UDPManager
     {
         #region Instances
         UdpClient server = new UdpClient(udpServerPort);
+        MqttClient client;
         #endregion
 
         #region Vars
@@ -173,14 +176,14 @@ namespace UDPDataProvider.UDPManager
                 Pulse_TempLobe = Parsed_ReceivedMessage.pulse,
                 GSR = Parsed_ReceivedMessage.gsr
             };
+            //ADD IF FUNCTION BASED ON PARAMETERS
             OnUDPReceived(args);
+            Publish_Data(args);
         }
         // this function is used to parse MQTT JSON String
         void JSONParse_ReceivedMessage()
         {
-
             Parsed_ReceivedMessage = JObject.Parse(ReceivedMessage);
-
         }
 
 
@@ -214,6 +217,20 @@ namespace UDPDataProvider.UDPManager
                 exception_thrown = false;
                 Console.WriteLine("The exception indicates the message was not sent.");
             }
+        }
+        #endregion
+
+        #region MQTT
+
+        private void Publish_Data(TextReceivedEventArgs e)
+        {
+            // Send the data from ESP to the VTT Player using MQTT/QOS 1
+            client.Publish("wekit/vest/GSR_Raw", Encoding.UTF8.GetBytes(e.GSR), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
+            client.Publish("wekit/vest/Pulse_Raw", Encoding.UTF8.GetBytes(e.Pulse_TempLobe), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
+            client.Publish("wekit/vest/Sht0_Temp", Encoding.UTF8.GetBytes(e.Temp_Ext), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
+            client.Publish("wekit/vest/Sht0_Hum", Encoding.UTF8.GetBytes(e.Humidity_Ext), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
+            client.Publish("wekit/vest/Sht2_Temp", Encoding.UTF8.GetBytes(e.Temp_Int), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
+            client.Publish("wekit/vest/Sht2_Hum", Encoding.UTF8.GetBytes(e.Humidity_Int), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
         }
         #endregion
     }
