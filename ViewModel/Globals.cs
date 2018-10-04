@@ -57,6 +57,5 @@ namespace MQTTDataProvider.ViewModel
                 return _client;
             }
         }
-
     }
 }
