@@ -1,13 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using MQTTDataProvider.ViewModel;
 using Newtonsoft.Json.Linq;
 using System;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using UDPDataProvider.ViewModel;
+
 
 namespace UDPDataProvider.UDPManager
 {
@@ -35,11 +32,11 @@ namespace UDPDataProvider.UDPManager
         private const int udpVTTPlayerPort = 5006;
 
         //string containing the IP address of the VTT Player
-        readonly string VttPlayerAddress = "127.0.0.1";
+        readonly string VttPlayerAddress = "0.0.0.0";
 
         #endregion
 
-        #region EventHandlers
+        #region Events
 
         public event EventHandler<TextReceivedEventArgs> NewUDPTextReceived;
 
@@ -98,7 +95,7 @@ namespace UDPDataProvider.UDPManager
                 Received_Data = server.EndReceive(res, ref RemoteIpEndPoint);
                 ReceivedMessage = Encoding.UTF8.GetString(Received_Data);
                 JSONParse_ReceivedMessage();
-                Publish_Data();
+                PublishData();
                 UpdateValues();
                 server.BeginReceive(new AsyncCallback(UDPServerCallback), null);
             }
@@ -133,6 +130,7 @@ namespace UDPDataProvider.UDPManager
             }
 
         }
+
         // this function sets all the variables to the received values
         void UpdateValues()
         {
@@ -175,45 +173,21 @@ namespace UDPDataProvider.UDPManager
             };
             OnUDPReceived(args);
         }
+
         // this function is used to parse MQTT JSON String
         void JSONParse_ReceivedMessage()
         {
-
             Parsed_ReceivedMessage = JObject.Parse(ReceivedMessage);
-
         }
 
-
-        #endregion
-
-        #region UDP
         // this code runs when UDP data is received. It sends the unfiltered string directly to the VTT Player.
-        private void Publish_Data()
+        private void PublishData()
         {
-            Boolean exception_thrown = false;
-            Socket sending_socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram,
-            ProtocolType.Udp);
+            //potentially add a startup parameter to switch between MQTT and UDP sending
+            Socket sending_socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram,ProtocolType.Udp);
             IPAddress send_to_address = IPAddress.Parse(VttPlayerAddress);
             IPEndPoint sending_end_point = new IPEndPoint(send_to_address, udpVTTPlayerPort);
-
-            try
-            {
-                sending_socket.SendTo(Received_Data, sending_end_point);
-            }
-            catch (Exception send_exception)
-            {
-                exception_thrown = true;
-                Console.WriteLine(" Exception {0}", send_exception.Message);
-            }
-            if (exception_thrown == false)
-            {
-                Console.WriteLine("Message has been sent to the broadcast address");
-            }
-            else
-            {
-                exception_thrown = false;
-                Console.WriteLine("The exception indicates the message was not sent.");
-            }
+            sending_socket.SendTo(Received_Data, sending_end_point);
         }
         #endregion
     }

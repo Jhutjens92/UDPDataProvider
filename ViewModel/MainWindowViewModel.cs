@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using UDPDataProvider.UDPManager;
 using static UDPDataProvider.UDPManager.UDPDataManager;
+using MQTTDataProvider.ViewModel;
 
 namespace UDPDataProvider.ViewModel
 {
@@ -15,25 +16,17 @@ namespace UDPDataProvider.ViewModel
     {
         UDPDataManager udpmanager = new UDPDataManager();
 
-        #region Vars & Properties
-
-        private string _ESP_TimeStamp = "";
-        public String ESP_TimeStamp
-        {
-            get { return _ESP_TimeStamp; }
-            set
-            {
-                _ESP_TimeStamp = value;
-                OnPropertyChanged("ESP_TimeStamp");
-            }
-        }
-
+        #region Vars
         private string _IMU1_AccX = "";
         public String IMU1_AccX
         {
             get { return _IMU1_AccX; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU1_AccX = value;
                 OnPropertyChanged("IMU1_AccX");
             }
@@ -45,6 +38,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU1_AccY; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU1_AccY = value;
                 OnPropertyChanged("IMU1_AccY");
             }
@@ -56,6 +53,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU1_AccZ; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU1_AccZ = value;
                 OnPropertyChanged("IMU1_AccZ");
             }
@@ -67,6 +68,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU1_GyroX; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU1_GyroX = value;
                 OnPropertyChanged("IMU1_GyroX");
             }
@@ -78,6 +83,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU1_GyroY; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU1_GyroY = value;
                 OnPropertyChanged("IMU1_GyroY");
             }
@@ -89,6 +98,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU1_GyroZ; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU1_GyroZ = value;
                 OnPropertyChanged("IMU1_GyroZ");
             }
@@ -100,6 +113,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU1_MagX; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU1_MagX = value;
                 OnPropertyChanged("IMU1_MagX");
             }
@@ -111,6 +128,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU1_MagY; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU1_MagY = value;
                 OnPropertyChanged("IMU1_MagY");
             }
@@ -122,6 +143,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU1_MagZ; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU1_MagZ = value;
                 OnPropertyChanged("IMU1_MagZ");
             }
@@ -133,6 +158,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU1_Q0; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU1_Q0 = value;
                 OnPropertyChanged("IMU1_Q0");
             }
@@ -144,6 +173,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU1_Q1; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU1_Q1 = value;
                 OnPropertyChanged("IMU1_Q1");
             }
@@ -155,6 +188,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU1_Q2; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU1_Q2 = value;
                 OnPropertyChanged("IMU1_Q2");
             }
@@ -166,6 +203,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU1_Q3; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU1_Q3 = value;
                 OnPropertyChanged("IMU1_Q3");
             }
@@ -177,6 +218,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU2_AccX; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU2_AccX = value;
                 OnPropertyChanged("IMU2_AccX");
             }
@@ -188,6 +233,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU2_AccY; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU2_AccY = value;
                 OnPropertyChanged("IMU2_AccY");
             }
@@ -199,6 +248,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU2_AccZ; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU2_AccZ = value;
                 OnPropertyChanged("IMU2_AccZ");
             }
@@ -210,6 +263,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU2_GyroX; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU2_GyroX = value;
                 OnPropertyChanged("IMU2_GyroX");
             }
@@ -221,6 +278,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU2_GyroY; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU2_GyroY = value;
                 OnPropertyChanged("IMU2_GyroY");
             }
@@ -232,6 +293,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU2_GyroZ; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU2_GyroZ = value;
                 OnPropertyChanged("IMU2_GyroZ");
             }
@@ -243,6 +308,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU2_MagX; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU2_MagX = value;
                 OnPropertyChanged("IMU2_MagX");
             }
@@ -254,6 +323,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU2_MagY; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU2_MagY = value;
                 OnPropertyChanged("IMU2_MagY");
             }
@@ -265,6 +338,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU2_MagZ; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU2_MagZ = value;
                 OnPropertyChanged("IMU2_MagZ");
             }
@@ -276,6 +353,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU2_Q0; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU2_Q0 = value;
                 OnPropertyChanged("IMU2_Q0");
             }
@@ -287,6 +368,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU2_Q1; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU2_Q1 = value;
                 OnPropertyChanged("IMU2_Q1");
             }
@@ -298,6 +383,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU2_Q2; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU2_Q2 = value;
                 OnPropertyChanged("IMU2_Q2");
             }
@@ -309,6 +398,10 @@ namespace UDPDataProvider.ViewModel
             get { return _IMU2_Q3; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _IMU2_Q3 = value;
                 OnPropertyChanged("IMU2_Q3");
             }
@@ -320,6 +413,10 @@ namespace UDPDataProvider.ViewModel
             get { return _Temp_External; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _Temp_External = value;
                 OnPropertyChanged("Temp_External");
             }
@@ -331,6 +428,10 @@ namespace UDPDataProvider.ViewModel
             get { return _Humidity_External; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _Humidity_External = value;
                 OnPropertyChanged("Humidity_External");
             }
@@ -342,6 +443,10 @@ namespace UDPDataProvider.ViewModel
             get { return _Temp_Internal; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _Temp_Internal = value;
                 OnPropertyChanged("Temp_Internal");
             }
@@ -353,6 +458,10 @@ namespace UDPDataProvider.ViewModel
             get { return _Humidity_Internal; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _Humidity_Internal = value;
                 OnPropertyChanged("Humidity_Internal");
             }
@@ -364,6 +473,10 @@ namespace UDPDataProvider.ViewModel
             get { return _Pulse_TempLobe; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _Pulse_TempLobe = value;
                 OnPropertyChanged("Pulse_TempLobe");
             }
@@ -375,8 +488,27 @@ namespace UDPDataProvider.ViewModel
             get { return _GSR; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _GSR = value;
                 OnPropertyChanged("GSR");
+            }
+        }
+
+        private string _ESP_TimeStamp = "";
+        public String ESP_TimeStamp
+        {
+            get { return _ESP_TimeStamp; }
+            set
+            {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
+                _ESP_TimeStamp = value;
+                OnPropertyChanged("Timestamp");
             }
         }
 
@@ -386,9 +518,12 @@ namespace UDPDataProvider.ViewModel
             get { return _textReceived; }
             set
             {
+                if (value == null)
+                {
+                    value = 0.ToString();
+                }
                 _textReceived = value;
                 OnPropertyChanged("TextReceived");
-
             }
         }
 
@@ -400,7 +535,6 @@ namespace UDPDataProvider.ViewModel
             {
                 _buttonText = value;
                 OnPropertyChanged("ButtonText");
-
             }
         }
 
@@ -418,23 +552,14 @@ namespace UDPDataProvider.ViewModel
 
         #endregion
 
-        public MainWindowViewModel()
-        {
-            udpmanager.NewUDPTextReceived += NewUDPTextReceived;
-            HubConnector.StartConnection();
-            HubConnector.MyConnector.startRecordingEvent += MyConnector_startRecordingEvent;
-            HubConnector.MyConnector.stopRecordingEvent += MyConnector_stopRecordingEvent;
-            SetValueNames();
-        }
-
-
+        #region Events
         private void MyConnector_stopRecordingEvent(object sender)
         {
             Application.Current.Dispatcher.BeginInvoke(
                 DispatcherPriority.Background,
                 new Action(() => {
-                this.StartRecordingData();
-            }));
+                    this.StartRecordingData();
+                }));
         }
 
         private void MyConnector_startRecordingEvent(object sender)
@@ -442,8 +567,8 @@ namespace UDPDataProvider.ViewModel
             Application.Current.Dispatcher.BeginInvoke(
                  DispatcherPriority.Background,
                  new Action(() => {
-                 this.StartRecordingData();
-            }));
+                     this.StartRecordingData();
+                 }));
         }
 
         private void NewUDPTextReceived(object sender, TextReceivedEventArgs e)
@@ -484,13 +609,13 @@ namespace UDPDataProvider.ViewModel
             GSR = e.GSR;
             SendData();
         }
-        #region events
+
         private ICommand _buttonClicked;
 
         public ICommand OnButtonClicked
         {
-            get 
-                {
+            get
+            {
                 _buttonClicked = new RelayCommand(
                     param => this.StartRecordingData(), null
                     );
@@ -503,23 +628,39 @@ namespace UDPDataProvider.ViewModel
             if (Globals.IsRecordingUDP == false)
             {
                 Globals.IsRecordingUDP = true;
+                Globals.IsRecordingDone = true;
                 ButtonText = "Stop Recording";
                 ButtonColor = new SolidColorBrush(Colors.Green);
                 udpmanager.UDPServerStart();
-
             }
             else if (Globals.IsRecordingUDP == true)
             {
                 Globals.IsRecordingUDP = false;
                 ButtonText = "Start Recording";
                 ButtonColor = new SolidColorBrush(Colors.White);
-                udpmanager.UDPServerStop();
+                if (Globals.IsRecordingDone == true)
+                {
+                    udpmanager.UDPServerStop();
+                    Application.Current.Shutdown();
+                    Environment.Exit(0);
+                }
             }
-                
+        }
+
+        #endregion
+
+        #region Constructor
+        public MainWindowViewModel()
+        {
+            udpmanager.NewUDPTextReceived += NewUDPTextReceived;
+            HubConnector.StartConnection();
+            HubConnector.MyConnector.startRecordingEvent += MyConnector_startRecordingEvent;
+            HubConnector.MyConnector.stopRecordingEvent += MyConnector_stopRecordingEvent;
+            SetValueNames();
         }
         #endregion
 
-        #region LearningHubMethods
+        #region Methods
 
         public void SetValueNames()
         {
