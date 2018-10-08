@@ -19,42 +19,13 @@ namespace MQTTDataProvider.ViewModel
             }
         }
 
-        private static bool _isRecordingDone = false;
-        public static bool IsRecordingDone
+        private static bool _JSONErrorMessage = false;
+        public static bool JSONErrorMessage
         {
-            get { return _isRecordingDone; }
+            get { return _JSONErrorMessage; }
             set
             {
-                _isRecordingDone = value;
-            }
-        }
-
-        /*The following globals currently not being used since parameters haven't been implemented yet*/
-
-        //default MQTT server value for WEKIT
-        private static readonly string _brokerAddress = "localhost";
-        public static string BrokerAddress
-        {
-            get { return _brokerAddress; }
-        }
-
-        // use a unique id as client id
-        private static readonly string _cliendID = Guid.NewGuid().ToString();
-        public static string ClientID
-        {
-            get { return _cliendID; }
-        }
-
-        private static MqttClient _client = new MqttClient(BrokerAddress);
-        public static MqttClient Client
-        {
-            get
-            {
-                if (_client.IsConnected == false)
-                {
-                    _client.Connect(ClientID);
-                }
-                return _client;
+                _JSONErrorMessage = value;
             }
         }
     }
