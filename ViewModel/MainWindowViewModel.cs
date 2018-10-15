@@ -6,16 +6,16 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using UDPDataProvider.UDPManager;
-using static UDPDataProvider.UDPManager.UDPDataManager;
-using MQTTDataProvider.ViewModel;
+using UDPDataProvider.Classes;
+using static UDPDataProvider.Classes.UdpManager;
+using UDPDataProvider.ViewModel;
 
 namespace UDPDataProvider.ViewModel
 {
     class MainWindowViewModel: BindableBase
     {
         #region Instance Declaration
-        UDPDataManager udpmanager = new UDPDataManager();
+        UdpManager udpmanager = new UdpManager();
         #endregion
 
         #region Vars
@@ -87,46 +87,46 @@ namespace UDPDataProvider.ViewModel
 
         private void SendData(object sender, TextReceivedEventArgs e)
         {
-            if (Globals.JSONErrorMessage == false)
+            if (Globals.jsonErrorMessage == false)
             {
                 try
                 {
-                    TextReceived = e.TextReceived;
+                    TextReceived = e.textReceived;
                     var values = new List<string>
                 {
-                    e.ESP_TimeStamp,
-                    e.IMU1_AccX,
-                    e.IMU1_AccY,
-                    e.IMU1_AccZ,
-                    e.IMU1_GyroX,
-                    e.IMU1_GyroY,
-                    e.IMU1_GyroZ,
-                    e.IMU1_MagX,
-                    e.IMU1_MagY,
-                    e.IMU1_MagZ,
-                    e.IMU1_Q0,
-                    e.IMU1_Q1,
-                    e.IMU1_Q2,
-                    e.IMU1_Q3,
-                    e.IMU2_AccX,
-                    e.IMU2_AccY,
-                    e.IMU2_AccZ,
-                    e.IMU2_GyroX,
-                    e.IMU2_GyroY,
-                    e.IMU2_GyroZ,
-                    e.IMU2_MagX,
-                    e.IMU2_MagY,
-                    e.IMU2_MagZ,
-                    e.IMU2_Q0,
-                    e.IMU2_Q1,
-                    e.IMU2_Q2,
-                    e.IMU2_Q3,
-                    e.Temp_External,
-                    e.Humidity_External,
-                    e.Temp_Internal,
-                    e.Humidity_Internal,
-                    e.Pulse_TempLobe,
-                    e.GSR
+                    e.espTimeStamp,
+                    e.imu1_AccX,
+                    e.imu1_AccY,
+                    e.imu1_AccZ,
+                    e.imu1_GyroX,
+                    e.imu1_GyroY,
+                    e.imu1_GyroZ,
+                    e.imu1_MagX,
+                    e.imu1_MagY,
+                    e.imu1_MagZ,
+                    e.imu1_Q0,
+                    e.imu1_Q1,
+                    e.imu1_Q2,
+                    e.imu1_Q3,
+                    e.imu2_AccX,
+                    e.imu2_AccY,
+                    e.imu2_AccZ,
+                    e.imu2_GyroX,
+                    e.imu2_GyroY,
+                    e.imu2_GyroZ,
+                    e.imu2_MagX,
+                    e.imu2_MagY,
+                    e.imu2_MagZ,
+                    e.imu2_Q0,
+                    e.imu2_Q1,
+                    e.imu2_Q2,
+                    e.imu2_Q3,
+                    e.tempExternal,
+                    e.humExternal,
+                    e.tempInternal,
+                    e.humInternal,
+                    e.pulse,
+                    e.gsr
                 };
                     HubConnector.SendData(values);
                 }
@@ -135,9 +135,9 @@ namespace UDPDataProvider.ViewModel
                     Debug.WriteLine(ex.StackTrace);
                 }
             }
-            else if (Globals.JSONErrorMessage == true)
+            else if (Globals.jsonErrorMessage == true)
             {
-                TextReceived = e.TextReceived;
+                TextReceived = e.textReceived;
             }
         }
 
@@ -156,16 +156,16 @@ namespace UDPDataProvider.ViewModel
 
         public void StartRecordingData()
         {
-            if (Globals.IsRecordingUDP == false)
+            if (Globals.isRecordingUdp == false)
             {
-                Globals.IsRecordingUDP = true;
+                Globals.isRecordingUdp = true;
                 ButtonText = "Stop Recording";
                 ButtonColor = new SolidColorBrush(Colors.Green);
                 udpmanager.UDPServerStart();
             }
-            else if (Globals.IsRecordingUDP == true)
+            else if (Globals.isRecordingUdp == true)
             {
-                Globals.IsRecordingUDP = false;
+                Globals.isRecordingUdp = false;
                 ButtonText = "Start Recording";
                 ButtonColor = new SolidColorBrush(Colors.White);
             }

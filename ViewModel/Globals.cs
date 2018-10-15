@@ -5,27 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using uPLibrary.Networking.M2Mqtt;
 
-namespace MQTTDataProvider.ViewModel
+namespace UDPDataProvider.ViewModel
 {
     public static class Globals
     {
-        private static bool _isRecordingUDP = false;
-        public static bool IsRecordingUDP
+        private static bool _isRecordingUdp = false;
+        public static bool isRecordingUdp
         {
-            get { return _isRecordingUDP; }
+            get { return _isRecordingUdp; }
             set
             {
-                _isRecordingUDP = value;
+                _isRecordingUdp = value;
             }
         }
 
-        private static bool _JSONErrorMessage = false;
-        public static bool JSONErrorMessage
+        private static bool _jsonErrorMessage = false;
+        public static bool jsonErrorMessage
         {
-            get { return _JSONErrorMessage; }
+            get { return _jsonErrorMessage; }
             set
             {
-                _JSONErrorMessage = value;
+                _jsonErrorMessage = value;
             }
         }
     }
