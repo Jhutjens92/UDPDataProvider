@@ -190,7 +190,7 @@ namespace UDPDataProvider.ViewModel
         {
             try
             {
-                Process[] pp1 = Process.GetProcessesByName("MQTTDataProvider");
+                Process[] pp1 = Process.GetProcessesByName("UDPDataProvider");
                 pp1[0].CloseMainWindow();
             }
             catch (Exception e)
