@@ -14,21 +14,26 @@ namespace UDPDataProvider.Classes
         #region Vars
         // JSON Parser MQTT message
         public static dynamic parsedReceivedMessage;
+        
+        //string containing converted byte array Received_Data
+        private static string receivedMessage;
         #endregion
 
         #region Methods
         // Parse MQTT JSON String
-        public static void JSONParseReceivedMessage()
+        public static string JSONParseReceivedMessage(byte[] receivedData)
         {
+            receivedMessage = Encoding.UTF8.GetString(receivedData);
             Globals.jsonErrorMessage = false;
             try
             {
-                parsedReceivedMessage = JObject.Parse(UdpManager.receivedMessage);
+                parsedReceivedMessage = JObject.Parse(receivedMessage);
             }
             catch (Exception)
             {
-                Console.WriteLine("Invalid JSON String");
+                receivedMessage = "Invalid JSON String";
             }
+            return receivedMessage;
         }
         #endregion
     }

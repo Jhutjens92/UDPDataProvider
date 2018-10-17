@@ -17,10 +17,7 @@ namespace UDPDataProvider.Classes
 
         #region Vars
         //bytearray containing the received UDP message
-        byte[] receivedData;
-
-        //string containing converted byte array Received_Data
-        public static string receivedMessage;
+        private byte[] receivedData;
 
         // default UDPServerPort value
         public static int serverPort = 5005;
@@ -29,7 +26,7 @@ namespace UDPDataProvider.Classes
         public static int clientPort = 5006;
 
         //string containing the IP address of the VTT Player
-        public static string clientAddress = "0.0.0.0";
+        public static string clientAddress = "127.0.0.1";
         #endregion
 
         #region Events
@@ -524,19 +521,23 @@ namespace UDPDataProvider.Classes
         }
         #endregion
 
+        #region Constructor
+        public UdpManager()
+        {
+            ParameterSet.SetParameters();
+        }
+        #endregion
+
         #region Methods
         // Async function running the UDP Server. 
         private void UDPServerCallback(IAsyncResult res)
         {
             if (Globals.isRecordingUdp == true)
             {
-                ParameterSet.SetParameters();
                 IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, serverPort);
-                receivedData = server.EndReceive(res, ref RemoteIpEndPoint);
-                receivedMessage = Encoding.UTF8.GetString(receivedData);
-                JsonParser.JSONParseReceivedMessage();
+                receivedData = server.EndReceive(res, ref RemoteIpEndPoint);           
+                UpdateValues(JsonParser.JSONParseReceivedMessage(receivedData));
                 PublishData();
-                UpdateValues();
                 server.BeginReceive(new AsyncCallback(UDPServerCallback), null);
             }
         }
@@ -572,7 +573,7 @@ namespace UDPDataProvider.Classes
         }
 
         // this function sets all the variables to the received values
-        private void UpdateValues()
+        private void UpdateValues(string receivedMessage)
         {
             try
             {

@@ -18,12 +18,12 @@ namespace MQTTDataProvider.Classes
                 int parameterIndex = Array.IndexOf(Parameters, "-sp");
                 UdpManager.serverPort = Int32.Parse(Parameters[parameterIndex + 1]);
             }
-            else if (Parameters.Any(s => s.Contains("-cp")))
+            if (Parameters.Any(s => s.Contains("-cp")))
             {
                 int parameterIndex = Array.IndexOf(Parameters, "-cp");
                 UdpManager.clientPort = Int32.Parse(Parameters[parameterIndex + 1]);
             }
-            else if (Parameters.Any(s => s.Contains("-ca")))
+            if (Parameters.Any(s => s.Contains("-ca")))
             {
                 int parameterIndex = Array.IndexOf(Parameters, "-ca");
                 UdpManager.clientAddress = Parameters[parameterIndex + 1];

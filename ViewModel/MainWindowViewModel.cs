@@ -180,8 +180,8 @@ namespace UDPDataProvider.ViewModel
             HubConnector.StartConnection();
             HubConnector.MyConnector.startRecordingEvent += MyConnector_startRecordingEvent;
             HubConnector.MyConnector.stopRecordingEvent += MyConnector_stopRecordingEvent;
-            SetValueNames();
             Application.Current.MainWindow.Closing += MainWindow_Closing;
+            SetValueNames();
         }
         #endregion
 
@@ -190,8 +190,8 @@ namespace UDPDataProvider.ViewModel
         {
             try
             {
-                Process[] pp1 = Process.GetProcessesByName("UDPDataProvider");
-                pp1[0].CloseMainWindow();
+                Process[] udpDataProviderProcess = Process.GetProcessesByName("UDPDataProvider");
+                udpDataProviderProcess[0].CloseMainWindow();
             }
             catch (Exception e)
             {
