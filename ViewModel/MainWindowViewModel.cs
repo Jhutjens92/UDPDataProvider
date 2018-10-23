@@ -1,57 +1,56 @@
 ﻿using System;
-﻿using UDPDataProvider.Model;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using UDPDataProvider.Classes;
+using UDPDataProvider.Model;
 using static UDPDataProvider.Classes.UdpManager;
-using UDPDataProvider.ViewModel;
 
 namespace UDPDataProvider.ViewModel
 {
-    class MainWindowViewModel: BindableBase
+    class MainWindowViewModel : BindableBase
     {
-        #region Instance Declaration
+        #region Instance declaration
         UdpManager udpmanager = new UdpManager();
         #endregion
 
-        #region Vars
-        private string _textReceived = "";
-        public String TextReceived
+        #region Variables
+
+        private string textReceived = "";
+        public string TextReceived
         {
-            get { return _textReceived; }
+            get { return textReceived; }
             set
             {
                 if (value == null)
                 {
                     value = 0.ToString();
                 }
-                _textReceived = value;
+                textReceived = value;
                 OnPropertyChanged("TextReceived");
             }
         }
 
-        private string _buttonText = "Start Recording";
-        public String ButtonText
+        private string buttonText = "Start Recording";
+        public string ButtonText
         {
-            get { return _buttonText; }
+            get { return buttonText; }
             set
             {
-                _buttonText = value;
+                buttonText = value;
                 OnPropertyChanged("ButtonText");
             }
         }
 
-        private Brush _buttonColor = new SolidColorBrush(Colors.White);
+        private Brush buttonColor = new SolidColorBrush(Colors.White);
         public Brush ButtonColor
         {
-            get { return _buttonColor; }
+            get { return buttonColor; }
             set
             {
-                _buttonColor = value;
+                buttonColor = value;
                 OnPropertyChanged("ButtonColor");
 
             }
@@ -60,6 +59,7 @@ namespace UDPDataProvider.ViewModel
         #endregion
 
         #region Events
+        // stop recording event from the learning hub
         private void MyConnector_stopRecordingEvent(object sender)
         {
             Application.Current.Dispatcher.BeginInvoke(
@@ -69,6 +69,7 @@ namespace UDPDataProvider.ViewModel
                 }));
         }
 
+        // start recording event from the learning hub
         private void MyConnector_startRecordingEvent(object sender)
         {
             Application.Current.Dispatcher.BeginInvoke(
@@ -78,67 +79,17 @@ namespace UDPDataProvider.ViewModel
                  }));
         }
 
+        // mainwindows closing event 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            udpmanager.UDPServerStop();
             CloseApp();
             Environment.Exit(Environment.ExitCode);
         }
 
-        private void SendData(object sender, TextReceivedEventArgs e)
+        // update the interface textbox
+        private void IUpdateTextBox(object sender, TextReceivedEventArgs e)
         {
-            if (Globals.jsonErrorMessage == false)
-            {
-                try
-                {
-                    TextReceived = e.textReceived;
-                    var values = new List<string>
-                {
-                    e.espTimeStamp,
-                    e.imu1_AccX,
-                    e.imu1_AccY,
-                    e.imu1_AccZ,
-                    e.imu1_GyroX,
-                    e.imu1_GyroY,
-                    e.imu1_GyroZ,
-                    e.imu1_MagX,
-                    e.imu1_MagY,
-                    e.imu1_MagZ,
-                    e.imu1_Q0,
-                    e.imu1_Q1,
-                    e.imu1_Q2,
-                    e.imu1_Q3,
-                    e.imu2_AccX,
-                    e.imu2_AccY,
-                    e.imu2_AccZ,
-                    e.imu2_GyroX,
-                    e.imu2_GyroY,
-                    e.imu2_GyroZ,
-                    e.imu2_MagX,
-                    e.imu2_MagY,
-                    e.imu2_MagZ,
-                    e.imu2_Q0,
-                    e.imu2_Q1,
-                    e.imu2_Q2,
-                    e.imu2_Q3,
-                    e.tempExternal,
-                    e.humExternal,
-                    e.tempInternal,
-                    e.humInternal,
-                    e.pulse,
-                    e.gsr
-                };
-                    HubConnector.SendData(values);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                }
-            }
-            else if (Globals.jsonErrorMessage == true)
-            {
-                TextReceived = e.textReceived;
-            }
+            TextReceived = e.TextReceived;
         }
 
         private ICommand _buttonClicked;
@@ -153,91 +104,53 @@ namespace UDPDataProvider.ViewModel
                 return _buttonClicked;
             }
         }
-
+        // start recording (execute functions in classes) and change the appearance of the button
         public void StartRecordingData()
         {
-            if (Globals.isRecordingUdp == false)
+            if (Globals.IsRecordingUdp == false)
             {
-                Globals.isRecordingUdp = true;
+                Globals.IsRecordingUdp = true;
                 ButtonText = "Stop Recording";
                 ButtonColor = new SolidColorBrush(Colors.Green);
                 udpmanager.UDPServerStart();
+
             }
-            else if (Globals.isRecordingUdp == true)
+            else if (Globals.IsRecordingUdp == true)
             {
-                Globals.isRecordingUdp = false;
+                Globals.IsRecordingUdp = false;
                 ButtonText = "Start Recording";
                 ButtonColor = new SolidColorBrush(Colors.White);
+                udpmanager.UDPServerStop();
+
             }
         }
-
         #endregion
 
         #region Constructor
         public MainWindowViewModel()
         {
-            udpmanager.NewUDPTextReceived += SendData;
+            udpmanager.NewUdpTextReceived += IUpdateTextBox;
             HubConnector.StartConnection();
             HubConnector.MyConnector.startRecordingEvent += MyConnector_startRecordingEvent;
             HubConnector.MyConnector.stopRecordingEvent += MyConnector_stopRecordingEvent;
-            SetValueNames();
+            SetLHDescriptions.SetDescriptions();
             Application.Current.MainWindow.Closing += MainWindow_Closing;
         }
         #endregion
 
         #region Methods
+        // find the running process and close it down properly.
         public void CloseApp()
         {
             try
             {
-                Process[] pp1 = Process.GetProcessesByName("UDPDataProvider");
-                pp1[0].CloseMainWindow();
+                Process[] UdpDataProviderProcess = Process.GetProcessesByName("UDPDataProvider");
+                UdpDataProviderProcess[0].CloseMainWindow();
             }
             catch (Exception e)
             {
                 Console.WriteLine("I got an exception after closing App" + e);
             }
-        }
-
-        public void SetValueNames()
-        {
-            var names = new List<string>
-            {
-                "ESP_TimeStap",
-                "IMU1_AccX",
-                "IMU1_AccY",
-                "IMU1_AccZ",
-                "IMU1_GyroX",
-                "IMU1_GyroY",
-                "IMU1_GyroZ",
-                "IMU1_MagX",
-                "IMU1_MagY",
-                "IMU1_MagZ",
-                "IMU1_Q0",
-                "IMU1_Q1",
-                "IMU1_Q2",
-                "IMU1_Q3",
-                "IMU2_AccX",
-                "IMU2_AccY",
-                "IMU2_AccZ",
-                "IMU2_GyroX",
-                "IMU2_GyroY",
-                "IMU2_GyroZ",
-                "IMU2_MagX",
-                "IMU2_MagY",
-                "IMU2_MagZ",
-                "IMU2_Q0",
-                "IMU2_Q1",
-                "IMU2_Q2",
-                "IMU2_Q3",
-                "Temp_Ext",
-                "Humidity_Ext",
-                "Temp_Int",
-                "Humidity_Int",
-                "Pulse_TempLobe",
-                "GSR"
-            };
-            HubConnector.SetValuesName(names);
         }
         #endregion
     }

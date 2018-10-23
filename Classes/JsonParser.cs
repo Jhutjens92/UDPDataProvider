@@ -1,33 +1,35 @@
-﻿using UDPDataProvider.ViewModel;
-using UDPDataProvider.Classes;
+﻿using System;
+using UDPDataProvider.ViewModel;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace UDPDataProvider.Classes
 {
     class JsonParser
     {
-        #region Vars
-        // JSON Parser MQTT message
-        public static dynamic parsedReceivedMessage;
+
+        #region Variables
+        // JSON Parser UDP message
+        public static dynamic ParsedUdpMsg
+        {
+            get { return parsedUdpMsg; }
+            set { parsedUdpMsg = value; }
+        }
+        private static dynamic parsedUdpMsg;
         #endregion
 
-        #region Methods
-        // Parse MQTT JSON String
-        public static void JSONParseReceivedMessage()
+        #region Method
+        // Parse UDP JSON string
+        public static void JSONParseReceivedMessage(string receivedStrMsg)
         {
-            Globals.jsonErrorMessage = false;
+            Globals.JsonErrorMessage = false;
             try
             {
-                parsedReceivedMessage = JObject.Parse(UdpManager.receivedMessage);
+                parsedUdpMsg = JObject.Parse(receivedStrMsg);
             }
             catch (Exception)
             {
-                Console.WriteLine("Invalid JSON String");
+                Console.WriteLine("Invalid JSON string");
             }
         }
         #endregion

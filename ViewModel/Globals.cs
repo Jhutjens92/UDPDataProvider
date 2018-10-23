@@ -9,24 +9,25 @@ namespace UDPDataProvider.ViewModel
 {
     public static class Globals
     {
-        private static bool _isRecordingUdp = false;
-        public static bool isRecordingUdp
-        {
-            get { return _isRecordingUdp; }
-            set
-            {
-                _isRecordingUdp = value;
-            }
-        }
 
-        private static bool _jsonErrorMessage = false;
-        public static bool jsonErrorMessage
+        public static bool IsRecordingUdp
         {
-            get { return _jsonErrorMessage; }
+            get { return isRecordingUdp; }
             set
             {
-                _jsonErrorMessage = value;
+                isRecordingUdp = value;
             }
         }
+        private static bool isRecordingUdp = false;
+
+        public static bool JsonErrorMessage
+        {
+            get { return jsonErrorMessage; }
+            set
+            {
+                jsonErrorMessage = value;
+            }
+        }
+        private static bool jsonErrorMessage = false;
     }
 }
