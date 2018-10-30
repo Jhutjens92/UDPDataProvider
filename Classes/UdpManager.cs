@@ -8,33 +8,58 @@ using UDPDataProvider.Classes;
 
 namespace UDPDataProvider.Classes
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>
+    /// UdpManager class handles all UDP functions. Also includes updating the variables based on
+    /// published data.
+    /// </summary>
+    ///
+    /// <remarks>   Jordi Hutjens, 26-10-2018. </remarks>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     class UdpManager
     {
         #region Instance declaration
         CheckParameters chkpar = new CheckParameters();
+        JsonParser jsonpar = new JsonParser();
+        SendToLH sendlh = new SendToLH();
         UdpClient client;
-        #endregion
 
-        #region Variables
-        // byte array containing the UDP published message
-        private byte[] receivedByteMsg;
-        // string containing the UDP published message
-        private string receivedStrMsg;
         #endregion
 
         #region Events
-        // handler for subscribing classes where you do +=
+
+        /// <summary>   Handler for other classes to subscribe to. </summary>
         public event EventHandler<TextReceivedEventArgs> NewUdpTextReceived;
 
-        // this is for raising the event in the class
-        protected virtual void OnNewTextReceived(TextReceivedEventArgs UpdateValuesEvent)
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Raising the event in the UdpManager class. </summary>
+        ///
+        /// <remarks>   Jordi Hutjens, 26-10-2018. </remarks>
+        ///
+        /// <param name="e">    Containing the filtered Json string. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        protected virtual void OnNewTextReceived(TextReceivedEventArgs e)
         {
-            NewUdpTextReceived?.Invoke(this, UpdateValuesEvent);
+            NewUdpTextReceived?.Invoke(this, e);
         }
 
-        //inherits from event args which holds all the values that needs to be passed as args in the event
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>
+        /// inherits from event args which holds all the values that needs to be passed as args in the
+        /// event.
+        /// </summary>
+        ///
+        /// <remarks>   Jordi Hutjens, 26-10-2018. </remarks>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public class TextReceivedEventArgs : EventArgs
         {
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the text received. </summary>
+            ///
+            /// <value> The text received. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string TextReceived
             {
                 get
@@ -52,6 +77,12 @@ namespace UDPDataProvider.Classes
             }
             private string textReceived;
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 1 accumulate x coordinate. </summary>
+            ///
+            /// <value> The imu 1 accumulate x coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string IMU1_AccX
             {
                 get { return imu1_AccX; }
@@ -65,6 +96,12 @@ namespace UDPDataProvider.Classes
                 }
             }
             private string imu1_AccX = "";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 1 accumulate y coordinate. </summary>
+            ///
+            /// <value> The imu 1 accumulate y coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string IMU1_AccY
             {
@@ -80,6 +117,12 @@ namespace UDPDataProvider.Classes
             }
             private string imu1_AccY = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 1 accumulate z coordinate. </summary>
+            ///
+            /// <value> The imu 1 accumulate z coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string IMU1_AccZ
             {
                 get { return imu1_AccZ; }
@@ -93,6 +136,12 @@ namespace UDPDataProvider.Classes
                 }
             }
             private string imu1_AccZ = "";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 1 gyro x coordinate. </summary>
+            ///
+            /// <value> The imu 1 gyro x coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string IMU1_GyroX
             {
@@ -108,6 +157,12 @@ namespace UDPDataProvider.Classes
             }
             private string imu1_GyroX = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 1 gyro y coordinate. </summary>
+            ///
+            /// <value> The imu 1 gyro y coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string IMU1_GyroY
             {
                 get { return imu1_GyroY; }
@@ -121,6 +176,12 @@ namespace UDPDataProvider.Classes
                 }
             }
             private string imu1_GyroY = "";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 1 gyro z coordinate./ </summary>
+            ///
+            /// <value> The imu 1 gyro z coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string IMU1_GyroZ
             {
@@ -136,6 +197,12 @@ namespace UDPDataProvider.Classes
             }
             private string imu1_GyroZ = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 1 magnitude x coordinate. </summary>
+            ///
+            /// <value> The imu 1 magnitude x coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string IMU1_MagX
             {
                 get { return imu1_MagX; }
@@ -150,6 +217,11 @@ namespace UDPDataProvider.Classes
             }
             private string imu1_MagX = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 1 magnitude y coordinate. </summary>
+            ///
+            /// <value> The imu 1 magnitude y coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string IMU1_MagY
             {
@@ -165,6 +237,12 @@ namespace UDPDataProvider.Classes
             }
             private string imu1_MagY = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 1 magnitude z coordinate. </summary>
+            ///
+            /// <value> The imu 1 magnitude z coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string IMU1_MagZ
             {
                 get { return imu1_MagZ; }
@@ -178,6 +256,12 @@ namespace UDPDataProvider.Classes
                 }
             }
             private string imu1_MagZ = "";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 1 q 0. </summary>
+            ///
+            /// <value> The imu 1 q 0. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string IMU1_Q0
             {
@@ -193,6 +277,12 @@ namespace UDPDataProvider.Classes
             }
             private string imu1_Q0 = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 1 q 1. </summary>
+            ///
+            /// <value> The imu 1 q 1. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string IMU1_Q1
             {
                 get { return imu1_Q1; }
@@ -206,6 +296,12 @@ namespace UDPDataProvider.Classes
                 }
             }
             private string imu1_Q1 = "";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 1 q 2. </summary>
+            ///
+            /// <value> The imu 1 q 2. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string IMU1_Q2
             {
@@ -221,6 +317,12 @@ namespace UDPDataProvider.Classes
             }
             private string imu1_Q2 = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 1 q 3. </summary>
+            ///
+            /// <value> The imu 1 q 3. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string IMU1_Q3
             {
                 get { return imu1_Q3; }
@@ -234,6 +336,12 @@ namespace UDPDataProvider.Classes
                 }
             }
             private string imu1_Q3 = "";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 2 accumulate x coordinate. </summary>
+            ///
+            /// <value> The imu 2 accumulate x coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string IMU2_AccX
             {
@@ -249,6 +357,12 @@ namespace UDPDataProvider.Classes
             }
             private string imu2_AccX = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 2 accumulate y coordinate. </summary>
+            ///
+            /// <value> The imu 2 accumulate y coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string IMU2_AccY
             {
                 get { return imu2_AccY; }
@@ -262,6 +376,12 @@ namespace UDPDataProvider.Classes
                 }
             }
             private string imu2_AccY = "";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 2 accumulate z coordinate. </summary>
+            ///
+            /// <value> The imu 2 accumulate z coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string IMU2_AccZ
             {
@@ -277,6 +397,12 @@ namespace UDPDataProvider.Classes
             }
             private string imu2_AccZ = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 2 gyro x coordinate. </summary>
+            ///
+            /// <value> The imu 2 gyro x coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string IMU2_GyroX
             {
                 get { return imu2_GyroX; }
@@ -290,6 +416,12 @@ namespace UDPDataProvider.Classes
                 }
             }
             private string imu2_GyroX = "";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 2 gyro y coordinate. </summary>
+            ///
+            /// <value> The imu 2 gyro y coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string IMU2_GyroY
             {
@@ -305,6 +437,12 @@ namespace UDPDataProvider.Classes
             }
             private string imu2_GyroY = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 2 gyro z coordinate. </summary>
+            ///
+            /// <value> The imu 2 gyro z coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string IMU2_GyroZ
             {
                 get { return imu2_GyroZ; }
@@ -318,6 +456,12 @@ namespace UDPDataProvider.Classes
                 }
             }
             private string imu2_GyroZ = "";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 2 magnitude x coordinate. </summary>
+            ///
+            /// <value> The imu 2 magnitude x coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string IMU2_MagX
             {
@@ -333,6 +477,12 @@ namespace UDPDataProvider.Classes
             }
             private string imu2_MagX = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 2 magnitude y coordinate. </summary>
+            ///
+            /// <value> The imu 2 magnitude y coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string IMU2_MagY
             {
                 get { return imu2_MagY; }
@@ -346,6 +496,12 @@ namespace UDPDataProvider.Classes
                 }
             }
             private string imu2_MagY = "";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 2 magnitude z coordinate. </summary>
+            ///
+            /// <value> The imu 2 magnitude z coordinate. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string IMU2_MagZ
             {
@@ -361,6 +517,12 @@ namespace UDPDataProvider.Classes
             }
             private string imu2_MagZ = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 2 q 0. </summary>
+            ///
+            /// <value> The imu 2 q 0. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string IMU2_Q0
             {
                 get { return imu2_Q0; }
@@ -374,6 +536,12 @@ namespace UDPDataProvider.Classes
                 }
             }
             private string imu2_Q0 = "";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 2 q 1. </summary>
+            ///
+            /// <value> The imu 2 q 1. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string IMU2_Q1
             {
@@ -389,6 +557,12 @@ namespace UDPDataProvider.Classes
             }
             private string imu2_Q1 = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 2 q 2. </summary>
+            ///
+            /// <value> The imu 2 q 2. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string IMU2_Q2
             {
                 get { return imu2_Q2; }
@@ -402,6 +576,12 @@ namespace UDPDataProvider.Classes
                 }
             }
             private string imu2_Q2 = "";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the imu 2 q 3. </summary>
+            ///
+            /// <value> The imu 2 q 3. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string IMU2_Q3
             {
@@ -417,6 +597,12 @@ namespace UDPDataProvider.Classes
             }
             private string imu2_Q3 = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the temporary external. </summary>
+            ///
+            /// <value> The temporary external. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string TempExternal
             {
                 get { return tempExternal; }
@@ -430,6 +616,12 @@ namespace UDPDataProvider.Classes
                 }
             }
             private string tempExternal = "";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the hum external. </summary>
+            ///
+            /// <value> The hum external. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string HumExternal
             {
@@ -445,6 +637,12 @@ namespace UDPDataProvider.Classes
             }
             private string humExternal = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the temporary internal. </summary>
+            ///
+            /// <value> The temporary internal. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string TempInternal
             {
                 get { return tempInternal; }
@@ -458,6 +656,12 @@ namespace UDPDataProvider.Classes
                 }
             }
             private string tempInternal = "";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the hum internal. </summary>
+            ///
+            /// <value> The hum internal. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string HumInternal
             {
@@ -473,6 +677,12 @@ namespace UDPDataProvider.Classes
             }
             private string humInternal = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the pulse. </summary>
+            ///
+            /// <value> The pulse. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string Pulse
             {
                 get { return pulse; }
@@ -486,6 +696,12 @@ namespace UDPDataProvider.Classes
                 }
             }
             private string pulse = "";
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the gsr. </summary>
+            ///
+            /// <value> The gsr. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             public string GSR
             {
@@ -501,6 +717,12 @@ namespace UDPDataProvider.Classes
             }
             private string gsr = "";
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            /// <summary>   Gets or sets the esp time stamp. </summary>
+            ///
+            /// <value> The esp time stamp. </value>
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+
             public string ESPTimeStamp
             {
                 get { return espTimeStamp; }
@@ -515,123 +737,166 @@ namespace UDPDataProvider.Classes
             }
             private string espTimeStamp = "";
         }
+
         #endregion
 
         #region Methods
-        // UDP Server callback
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Async callback, called on completion of UDP server callback. </summary>
+        ///
+        /// <remarks>   Jordi Hutjens, 30-10-2018. </remarks>
+        ///
+        /// <param name="res">  The result of the asynchronous operation. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         private void UDPServerCallback(IAsyncResult res)
         {
+            string receivedStrMsg;
+            byte[] receivedByteMsg;
+
             IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, chkpar.ServerPort);
             receivedByteMsg = client.EndReceive(res, ref RemoteIpEndPoint);
             receivedStrMsg = Encoding.UTF8.GetString(receivedByteMsg);
-            JsonParser.JSONParseReceivedMessage(receivedStrMsg);
+            jsonpar.JSONParseReceivedMessage(receivedStrMsg);
             UpdateValues();
-            PublishData();
+            PublishData(receivedByteMsg);
             NewUDPServerCallBack();
         }
 
-        // create new UDP server callback
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Create a new async callback. </summary>
+        ///
+        /// <remarks>   Jordi Hutjens, 30-10-2018. </remarks>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         private void NewUDPServerCallBack()
         {
             client.BeginReceive(new AsyncCallback(UDPServerCallback), null);
         }
 
-        // create new instance on var server
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Creates the udp server. </summary>
+        ///
+        /// <remarks>   Jordi Hutjens, 30-10-2018. </remarks>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         private void CreateServer()
         {
             client = new UdpClient(chkpar.ServerPort);
         }
 
-        // starts the UDP server when the start recording button is pressed
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   UDP server start. </summary>
+        ///
+        /// <remarks>   Jordi Hutjens, 30-10-2018. </remarks>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public void UDPServerStart()
         {
             chkpar.CheckStartupParameters();
             CreateServer();
-            if (Globals.IsRecordingUdp == true)
+            if (Globals.IsRecordingUdp)
             {
                 try
                 {
                     client.BeginReceive(new AsyncCallback(UDPServerCallback), null);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Console.WriteLine(e.ToString());
+                    Console.WriteLine(ex.ToString());
                 }
             }
         }
 
-        // stops the UDP Server at the end of a recording
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   UDP server stop. </summary>
+        ///
+        /// <remarks>   Jordi Hutjens, 30-10-2018. </remarks>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public void UDPServerStop()
         {
             try
             {
                 client.Close();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine(ex.ToString());
             }
 
         }
 
-        // this function sets all the variables to the received values
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Updates the values. </summary>
+        ///
+        /// <remarks>   Jordi Hutjens, 30-10-2018. </remarks>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         private void UpdateValues()
         {
             try
             {
                 TextReceivedEventArgs args = new TextReceivedEventArgs
                 {
-                    TextReceived = receivedStrMsg,
-                    ESPTimeStamp = JsonParser.ParsedUdpMsg.time,
-                    IMU1_AccX = JsonParser.ParsedUdpMsg.imus[0].ax,
-                    IMU1_AccY = JsonParser.ParsedUdpMsg.imus[0].ay,
-                    IMU1_AccZ = JsonParser.ParsedUdpMsg.imus[0].az,
-                    IMU1_GyroX = JsonParser.ParsedUdpMsg.imus[0].gx,
-                    IMU1_GyroY = JsonParser.ParsedUdpMsg.imus[0].gy,
-                    IMU1_GyroZ = JsonParser.ParsedUdpMsg.imus[0].gz,
-                    IMU1_MagX = JsonParser.ParsedUdpMsg.imus[0].mx,
-                    IMU1_MagY = JsonParser.ParsedUdpMsg.imus[0].my,
-                    IMU1_MagZ = JsonParser.ParsedUdpMsg.imus[0].mz,
-                    IMU1_Q0 = JsonParser.ParsedUdpMsg.imus[0].q0,
-                    IMU1_Q1 = JsonParser.ParsedUdpMsg.imus[0].q1,
-                    IMU1_Q2 = JsonParser.ParsedUdpMsg.imus[0].q2,
-                    IMU1_Q3 = JsonParser.ParsedUdpMsg.imus[0].q3,
-                    IMU2_AccX = JsonParser.ParsedUdpMsg.imus[1].ax,
-                    IMU2_AccY = JsonParser.ParsedUdpMsg.imus[1].ay,
-                    IMU2_AccZ = JsonParser.ParsedUdpMsg.imus[1].az,
-                    IMU2_GyroX = JsonParser.ParsedUdpMsg.imus[1].gx,
-                    IMU2_GyroY = JsonParser.ParsedUdpMsg.imus[1].gy,
-                    IMU2_GyroZ = JsonParser.ParsedUdpMsg.imus[1].gz,
-                    IMU2_MagX = JsonParser.ParsedUdpMsg.imus[1].mx,
-                    IMU2_MagY = JsonParser.ParsedUdpMsg.imus[1].my,
-                    IMU2_MagZ = JsonParser.ParsedUdpMsg.imus[1].mz,
-                    IMU2_Q0 = JsonParser.ParsedUdpMsg.imus[1].q0,
-                    IMU2_Q1 = JsonParser.ParsedUdpMsg.imus[1].q1,
-                    IMU2_Q2 = JsonParser.ParsedUdpMsg.imus[1].q2,
-                    IMU2_Q3 = JsonParser.ParsedUdpMsg.imus[1].q3,
-                    TempExternal = JsonParser.ParsedUdpMsg.shts[0].temp,
-                    HumExternal = JsonParser.ParsedUdpMsg.shts[0].hum,
-                    TempInternal = JsonParser.ParsedUdpMsg.shts[1].temp,
-                    HumInternal = JsonParser.ParsedUdpMsg.shts[1].hum,
-                    Pulse = JsonParser.ParsedUdpMsg.pulse,
-                    GSR = JsonParser.ParsedUdpMsg.gsr
+                    TextReceived = jsonpar.ParsedUdpMsg,
+                    ESPTimeStamp = jsonpar.ParsedUdpMsg.time,
+                    IMU1_AccX = jsonpar.ParsedUdpMsg.imus[0].ax,
+                    IMU1_AccY = jsonpar.ParsedUdpMsg.imus[0].ay,
+                    IMU1_AccZ = jsonpar.ParsedUdpMsg.imus[0].az,
+                    IMU1_GyroX = jsonpar.ParsedUdpMsg.imus[0].gx,
+                    IMU1_GyroY = jsonpar.ParsedUdpMsg.imus[0].gy,
+                    IMU1_GyroZ = jsonpar.ParsedUdpMsg.imus[0].gz,
+                    IMU1_MagX = jsonpar.ParsedUdpMsg.imus[0].mx,
+                    IMU1_MagY = jsonpar.ParsedUdpMsg.imus[0].my,
+                    IMU1_MagZ = jsonpar.ParsedUdpMsg.imus[0].mz,
+                    IMU1_Q0 = jsonpar.ParsedUdpMsg.imus[0].q0,
+                    IMU1_Q1 = jsonpar.ParsedUdpMsg.imus[0].q1,
+                    IMU1_Q2 = jsonpar.ParsedUdpMsg.imus[0].q2,
+                    IMU1_Q3 = jsonpar.ParsedUdpMsg.imus[0].q3,
+                    IMU2_AccX = jsonpar.ParsedUdpMsg.imus[1].ax,
+                    IMU2_AccY = jsonpar.ParsedUdpMsg.imus[1].ay,
+                    IMU2_AccZ = jsonpar.ParsedUdpMsg.imus[1].az,
+                    IMU2_GyroX = jsonpar.ParsedUdpMsg.imus[1].gx,
+                    IMU2_GyroY = jsonpar.ParsedUdpMsg.imus[1].gy,
+                    IMU2_GyroZ = jsonpar.ParsedUdpMsg.imus[1].gz,
+                    IMU2_MagX = jsonpar.ParsedUdpMsg.imus[1].mx,
+                    IMU2_MagY = jsonpar.ParsedUdpMsg.imus[1].my,
+                    IMU2_MagZ = jsonpar.ParsedUdpMsg.imus[1].mz,
+                    IMU2_Q0 = jsonpar.ParsedUdpMsg.imus[1].q0,
+                    IMU2_Q1 = jsonpar.ParsedUdpMsg.imus[1].q1,
+                    IMU2_Q2 = jsonpar.ParsedUdpMsg.imus[1].q2,
+                    IMU2_Q3 = jsonpar.ParsedUdpMsg.imus[1].q3,
+                    TempExternal = jsonpar.ParsedUdpMsg.shts[0].temp,
+                    HumExternal = jsonpar.ParsedUdpMsg.shts[0].hum,
+                    TempInternal = jsonpar.ParsedUdpMsg.shts[1].temp,
+                    HumInternal = jsonpar.ParsedUdpMsg.shts[1].hum,
+                    Pulse = jsonpar.ParsedUdpMsg.pulse,
+                    GSR = jsonpar.ParsedUdpMsg.gsr
                 };
                 OnNewTextReceived(args);
-                SendToLH.SendDataToLH(args);
+                sendlh.SendDataToLH(args);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 TextReceivedEventArgs args = new TextReceivedEventArgs
                 {
-                    TextReceived = "Invalid JSON message at the UDP Receiver"
+                    TextReceived = ex.Message
                 };
-                Globals.JsonErrorMessage = true;
                 OnNewTextReceived(args);
             }
         }
 
-        // this code runs when UDP data is received. It sends the unfiltered string directly to the client address.
-        private void PublishData()
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Publish data. </summary>
+        ///
+        /// <remarks>   Jordi Hutjens, 30-10-2018. </remarks>
+        ///
+        /// <param name="receivedByteMsg">  Message describing the received byte. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private void PublishData(byte[] receivedByteMsg)
         {
             Socket sendingSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram,ProtocolType.Udp);
             IPAddress sendToAddress = IPAddress.Parse(chkpar.ClientAddress);

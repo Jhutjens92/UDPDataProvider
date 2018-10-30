@@ -7,8 +7,19 @@ using uPLibrary.Networking.M2Mqtt;
 
 namespace UDPDataProvider.ViewModel
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Class containing global variables. </summary>
+    ///
+    /// <remarks>   Jordi Hutjens, 26-10-2018. </remarks>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public static class Globals
     {
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Method for setting IsRecordingUdp. </summary>
+        ///
+        /// <value> True if this object is recording mqtt, false if not. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public static bool IsRecordingUdp
         {
@@ -19,15 +30,5 @@ namespace UDPDataProvider.ViewModel
             }
         }
         private static bool isRecordingUdp = false;
-
-        public static bool JsonErrorMessage
-        {
-            get { return jsonErrorMessage; }
-            set
-            {
-                jsonErrorMessage = value;
-            }
-        }
-        private static bool jsonErrorMessage = false;
     }
 }

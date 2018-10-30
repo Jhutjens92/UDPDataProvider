@@ -9,7 +9,13 @@ namespace UDPDataProvider.Classes
     class CheckParameters
     {
         #region Variables
-        // default ClientPort value
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets or sets the client port./ </summary>
+        ///
+        /// <value> The client port. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public int ClientPort
         {
             get { return clientPort; }
@@ -17,7 +23,12 @@ namespace UDPDataProvider.Classes
         }
         private int clientPort;
 
-        // default ServerPort value
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets or sets the server port. </summary>
+        ///
+        /// <value> The server port. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public int ServerPort
         {
             get { return serverPort; }
@@ -25,7 +36,12 @@ namespace UDPDataProvider.Classes
         }
         private int serverPort;
 
-        // default ClientAddress value
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets or sets the client address. </summary>
+        ///
+        /// <value> The client address. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public string ClientAddress
         {
             get { return clientAddress; }
@@ -33,55 +49,73 @@ namespace UDPDataProvider.Classes
         }
         private string clientAddress;
 
-        // booleans to check if parameters are provided.
+
+        /// <summary>   True to cp par. </summary>
         bool cpPar = false;
+
+        /// <summary>   True to sp par. </summary>
         bool spPar = false;
+
+        /// <summary>   True to ca par. </summary>
         bool caPar = false;
 
         #endregion
 
         #region Method
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>
+        /// Checks the startup parameters given (if any). If no arguments given, it sets default values.
+        /// </summary>
+        ///
+        /// <remarks>   Jordi Hutjens, 26-10-2018. </remarks>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public void CheckStartupParameters()
         {
-            // check the startup parameters
-            string[] StartupPar = Environment.GetCommandLineArgs();
-            if (StartupPar.Any(s => s.Contains("-cp")))
+            try
             {
-                int ParIndex = Array.IndexOf(StartupPar, "-cp");
-                clientPort = Convert.ToInt32(StartupPar[ParIndex + 1]);
-                cpPar = true;
-            }
-            if (StartupPar.Any(s => s.Contains("-sp")))
-            {
-                int ParIndex = Array.IndexOf(StartupPar, "-sp");
-                serverPort = Convert.ToInt32(StartupPar[ParIndex + 1]);
-                spPar = true;
-            }
-            if (StartupPar.Any(s => s.Contains("-ca")))
-            {
-                int ParIndex = Array.IndexOf(StartupPar, "-ca");
-                clientAddress = StartupPar[ParIndex + 1];
-                caPar = true;
-            }
-            // if no parameters are provided, set the default values accordingly.
-            else 
-            {
-                if (cpPar == false)
+                string[] StartupPar = Environment.GetCommandLineArgs();
+                if (StartupPar.Any(s => s.Contains("-cp")))
                 {
-                    clientPort = 5006;
-                    Console.WriteLine("Starting with default client port (5005).");
+                    int ParIndex = Array.IndexOf(StartupPar, "-cp");
+                    clientPort = Convert.ToInt32(StartupPar[ParIndex + 1]);
+                    cpPar = true;
                 }
-                if (spPar == false)
+                if (StartupPar.Any(s => s.Contains("-sp")))
                 {
-                    serverPort = 5005;
-                    Console.WriteLine("Starting with default server port (5005).");
+                    int ParIndex = Array.IndexOf(StartupPar, "-sp");
+                    serverPort = Convert.ToInt32(StartupPar[ParIndex + 1]);
+                    spPar = true;
                 }
-                if (caPar == false)
+                if (StartupPar.Any(s => s.Contains("-ca")))
                 {
-                    clientAddress = "127.0.0.1";
-                    Console.WriteLine("Starting with default client IP address (localhost).");
+                    int ParIndex = Array.IndexOf(StartupPar, "-ca");
+                    clientAddress = StartupPar[ParIndex + 1];
+                    caPar = true;
                 }
-                
+                else
+                {
+                    if (!cpPar)
+                    {
+                        clientPort = 5006;
+                        Console.WriteLine("Starting with default client port (5005).");
+                    }
+                    if (!spPar)
+                    {
+                        serverPort = 5005;
+                        Console.WriteLine("Starting with default server port (5005).");
+                    }
+                    if (!caPar)
+                    {
+                        clientAddress = "127.0.0.1";
+                        Console.WriteLine("Starting with default client IP address (localhost).");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
         }
         #endregion
