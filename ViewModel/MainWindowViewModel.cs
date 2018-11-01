@@ -75,7 +75,6 @@ namespace UDPDataProvider.ViewModel
             {
                 buttonColor = value;
                 OnPropertyChanged("ButtonColor");
-
             }
         }
         private Brush buttonColor = new SolidColorBrush(Colors.White);
@@ -172,17 +171,16 @@ namespace UDPDataProvider.ViewModel
         {
             if (Globals.IsRecordingUdp)
             {
-                Globals.IsRecordingUdp = false;
                 ButtonText = "Start Recording";
                 ButtonColor = new SolidColorBrush(Colors.White);
-                udpmanager.UDPServerStart();
+                udpmanager.UDPServerStop();
             }
             else
             {
                 Globals.IsRecordingUdp = true;
                 ButtonText = "Stop Recording";
                 ButtonColor = new SolidColorBrush(Colors.Green);
-                udpmanager.UDPServerStop();
+                udpmanager.UDPServerStart();
             }
         }
 

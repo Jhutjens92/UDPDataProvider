@@ -11,6 +11,17 @@ namespace UDPDataProvider.Classes
         #region Variables
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   method for getting the BrokerAddress variable. </summary>
+        ///
+        /// <value> The broker address. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public string BrokerAddress
+        {
+            get { return brokerAddress; }
+        }
+        private string brokerAddress;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>   Gets or sets the client port./ </summary>
         ///
         /// <value> The client port. </value>
@@ -59,6 +70,9 @@ namespace UDPDataProvider.Classes
         /// <summary>   True to ca par. </summary>
         bool caPar = false;
 
+        /// <summary>   True to ba par. </summary>
+        bool baPar = false;
+
         #endregion
 
         #region Method
@@ -94,6 +108,12 @@ namespace UDPDataProvider.Classes
                     clientAddress = StartupPar[ParIndex + 1];
                     caPar = true;
                 }
+                if (StartupPar.Any(s => s.Contains("-ba")))
+                {
+                    int ParIndex = Array.IndexOf(StartupPar, "-ba");
+                    brokerAddress = StartupPar[ParIndex + 1];
+                    baPar = true;
+                }
                 else
                 {
                     if (!cpPar)
@@ -110,6 +130,11 @@ namespace UDPDataProvider.Classes
                     {
                         clientAddress = "127.0.0.1";
                         Console.WriteLine("Starting with default client IP address (localhost).");
+                    }
+                    if (!baPar)
+                    {
+                        brokerAddress = "localhost";
+                        Console.WriteLine("Starting with default broker address (localhost).");
                     }
                 }
             }

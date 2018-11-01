@@ -5,6 +5,9 @@ using System.Text;
 using System.Linq;
 using UDPDataProvider.ViewModel;
 using UDPDataProvider.Classes;
+using uPLibrary.Networking.M2Mqtt;
+using uPLibrary.Networking.M2Mqtt.Messages;
+using System.Windows;
 
 namespace UDPDataProvider.Classes
 {
@@ -20,10 +23,19 @@ namespace UDPDataProvider.Classes
     class UdpManager
     {
         #region Instance declaration
+
         CheckParameters chkpar = new CheckParameters();
         JsonParser jsonpar = new JsonParser();
         SendToLH sendlh = new SendToLH();
-        UdpClient client;
+        UdpClient udpClient;
+        MqttClient mqttClient;
+
+        #endregion
+
+        #region Variables
+
+        /// <summary>   Message describing the received string. </summary>
+        string receivedStrMsg;
 
         #endregion
 
@@ -740,6 +752,22 @@ namespace UDPDataProvider.Classes
 
         #endregion
 
+        #region Constructor
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Default constructor. </summary>
+        ///
+        /// <remarks>   Jordi Hutjens, 1-11-2018. </remarks>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public UdpManager()
+        {
+            chkpar.CheckStartupParameters();
+            CreateServer();
+        }
+
+        #endregion
+
         #region Methods
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -752,16 +780,57 @@ namespace UDPDataProvider.Classes
 
         private void UDPServerCallback(IAsyncResult res)
         {
-            string receivedStrMsg;
             byte[] receivedByteMsg;
 
             IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, chkpar.ServerPort);
-            receivedByteMsg = client.EndReceive(res, ref RemoteIpEndPoint);
+            receivedByteMsg = udpClient.EndReceive(res, ref RemoteIpEndPoint);
             receivedStrMsg = Encoding.UTF8.GetString(receivedByteMsg);
             jsonpar.JSONParseReceivedMessage(receivedStrMsg);
             UpdateValues();
-            PublishData(receivedByteMsg);
             NewUDPServerCallBack();
+        }
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Publish specific ESP data to the predefined topics using Mqtt/QoS 1. </summary>
+        ///
+        /// <remarks>   Jordi Hutjens, 26-10-2018. </remarks>
+        ///
+        /// <param name="e">    Containing the filtered received Mqtt text. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////  
+        private void PublishData(object sender, TextReceivedEventArgs e)
+        {
+            try
+            {
+                mqttClient.Publish("wekit/vest/GSR_Raw", Encoding.UTF8.GetBytes(e.GSR), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
+                mqttClient.Publish("wekit/vest/Pulse_Raw", Encoding.UTF8.GetBytes(e.Pulse), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
+                mqttClient.Publish("wekit/vest/Sht0_Temp", Encoding.UTF8.GetBytes(e.TempExternal), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
+                mqttClient.Publish("wekit/vest/Sht0_Hum", Encoding.UTF8.GetBytes(e.HumExternal), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
+                mqttClient.Publish("wekit/vest/Sht1_Temp", Encoding.UTF8.GetBytes(e.TempInternal), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
+                mqttClient.Publish("wekit/vest/Sht1_Hum", Encoding.UTF8.GetBytes(e.HumInternal), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Creates the MQTT Client. </summary>
+        ///
+        /// <remarks>   Jordi Hutjens, 26-10-2018. </remarks>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private void CreateMqttClient()
+        {
+            try
+            {
+                mqttClient = new MqttClient(chkpar.BrokerAddress);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -772,7 +841,7 @@ namespace UDPDataProvider.Classes
 
         private void NewUDPServerCallBack()
         {
-            client.BeginReceive(new AsyncCallback(UDPServerCallback), null);
+            udpClient.BeginReceive(new AsyncCallback(UDPServerCallback), null);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -783,7 +852,7 @@ namespace UDPDataProvider.Classes
 
         private void CreateServer()
         {
-            client = new UdpClient(chkpar.ServerPort);
+            udpClient = new UdpClient(chkpar.ServerPort);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -794,13 +863,11 @@ namespace UDPDataProvider.Classes
 
         public void UDPServerStart()
         {
-            chkpar.CheckStartupParameters();
-            CreateServer();
             if (Globals.IsRecordingUdp)
             {
                 try
                 {
-                    client.BeginReceive(new AsyncCallback(UDPServerCallback), null);
+                    udpClient.BeginReceive(new AsyncCallback(UDPServerCallback), null);
                 }
                 catch (Exception ex)
                 {
@@ -819,13 +886,12 @@ namespace UDPDataProvider.Classes
         {
             try
             {
-                client.Close();
+                udpClient.Close();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
-
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -836,73 +902,69 @@ namespace UDPDataProvider.Classes
 
         private void UpdateValues()
         {
-            try
+            if (!Globals.JsonErrorThrown)
             {
-                TextReceivedEventArgs args = new TextReceivedEventArgs
+                try
                 {
-                    TextReceived = jsonpar.ParsedUdpMsg,
-                    ESPTimeStamp = jsonpar.ParsedUdpMsg.time,
-                    IMU1_AccX = jsonpar.ParsedUdpMsg.imus[0].ax,
-                    IMU1_AccY = jsonpar.ParsedUdpMsg.imus[0].ay,
-                    IMU1_AccZ = jsonpar.ParsedUdpMsg.imus[0].az,
-                    IMU1_GyroX = jsonpar.ParsedUdpMsg.imus[0].gx,
-                    IMU1_GyroY = jsonpar.ParsedUdpMsg.imus[0].gy,
-                    IMU1_GyroZ = jsonpar.ParsedUdpMsg.imus[0].gz,
-                    IMU1_MagX = jsonpar.ParsedUdpMsg.imus[0].mx,
-                    IMU1_MagY = jsonpar.ParsedUdpMsg.imus[0].my,
-                    IMU1_MagZ = jsonpar.ParsedUdpMsg.imus[0].mz,
-                    IMU1_Q0 = jsonpar.ParsedUdpMsg.imus[0].q0,
-                    IMU1_Q1 = jsonpar.ParsedUdpMsg.imus[0].q1,
-                    IMU1_Q2 = jsonpar.ParsedUdpMsg.imus[0].q2,
-                    IMU1_Q3 = jsonpar.ParsedUdpMsg.imus[0].q3,
-                    IMU2_AccX = jsonpar.ParsedUdpMsg.imus[1].ax,
-                    IMU2_AccY = jsonpar.ParsedUdpMsg.imus[1].ay,
-                    IMU2_AccZ = jsonpar.ParsedUdpMsg.imus[1].az,
-                    IMU2_GyroX = jsonpar.ParsedUdpMsg.imus[1].gx,
-                    IMU2_GyroY = jsonpar.ParsedUdpMsg.imus[1].gy,
-                    IMU2_GyroZ = jsonpar.ParsedUdpMsg.imus[1].gz,
-                    IMU2_MagX = jsonpar.ParsedUdpMsg.imus[1].mx,
-                    IMU2_MagY = jsonpar.ParsedUdpMsg.imus[1].my,
-                    IMU2_MagZ = jsonpar.ParsedUdpMsg.imus[1].mz,
-                    IMU2_Q0 = jsonpar.ParsedUdpMsg.imus[1].q0,
-                    IMU2_Q1 = jsonpar.ParsedUdpMsg.imus[1].q1,
-                    IMU2_Q2 = jsonpar.ParsedUdpMsg.imus[1].q2,
-                    IMU2_Q3 = jsonpar.ParsedUdpMsg.imus[1].q3,
-                    TempExternal = jsonpar.ParsedUdpMsg.shts[0].temp,
-                    HumExternal = jsonpar.ParsedUdpMsg.shts[0].hum,
-                    TempInternal = jsonpar.ParsedUdpMsg.shts[1].temp,
-                    HumInternal = jsonpar.ParsedUdpMsg.shts[1].hum,
-                    Pulse = jsonpar.ParsedUdpMsg.pulse,
-                    GSR = jsonpar.ParsedUdpMsg.gsr
-                };
-                OnNewTextReceived(args);
-                sendlh.SendDataToLH(args);
+                    TextReceivedEventArgs args = new TextReceivedEventArgs
+                    {
+                        TextReceived = receivedStrMsg,
+                        ESPTimeStamp = jsonpar.ParsedUdpMsg.time,
+                        IMU1_AccX = jsonpar.ParsedUdpMsg.imus[0].ax,
+                        IMU1_AccY = jsonpar.ParsedUdpMsg.imus[0].ay,
+                        IMU1_AccZ = jsonpar.ParsedUdpMsg.imus[0].az,
+                        IMU1_GyroX = jsonpar.ParsedUdpMsg.imus[0].gx,
+                        IMU1_GyroY = jsonpar.ParsedUdpMsg.imus[0].gy,
+                        IMU1_GyroZ = jsonpar.ParsedUdpMsg.imus[0].gz,
+                        IMU1_MagX = jsonpar.ParsedUdpMsg.imus[0].mx,
+                        IMU1_MagY = jsonpar.ParsedUdpMsg.imus[0].my,
+                        IMU1_MagZ = jsonpar.ParsedUdpMsg.imus[0].mz,
+                        IMU1_Q0 = jsonpar.ParsedUdpMsg.imus[0].q0,
+                        IMU1_Q1 = jsonpar.ParsedUdpMsg.imus[0].q1,
+                        IMU1_Q2 = jsonpar.ParsedUdpMsg.imus[0].q2,
+                        IMU1_Q3 = jsonpar.ParsedUdpMsg.imus[0].q3,
+                        IMU2_AccX = jsonpar.ParsedUdpMsg.imus[1].ax,
+                        IMU2_AccY = jsonpar.ParsedUdpMsg.imus[1].ay,
+                        IMU2_AccZ = jsonpar.ParsedUdpMsg.imus[1].az,
+                        IMU2_GyroX = jsonpar.ParsedUdpMsg.imus[1].gx,
+                        IMU2_GyroY = jsonpar.ParsedUdpMsg.imus[1].gy,
+                        IMU2_GyroZ = jsonpar.ParsedUdpMsg.imus[1].gz,
+                        IMU2_MagX = jsonpar.ParsedUdpMsg.imus[1].mx,
+                        IMU2_MagY = jsonpar.ParsedUdpMsg.imus[1].my,
+                        IMU2_MagZ = jsonpar.ParsedUdpMsg.imus[1].mz,
+                        IMU2_Q0 = jsonpar.ParsedUdpMsg.imus[1].q0,
+                        IMU2_Q1 = jsonpar.ParsedUdpMsg.imus[1].q1,
+                        IMU2_Q2 = jsonpar.ParsedUdpMsg.imus[1].q2,
+                        IMU2_Q3 = jsonpar.ParsedUdpMsg.imus[1].q3,
+                        TempExternal = jsonpar.ParsedUdpMsg.shts[0].temp,
+                        HumExternal = jsonpar.ParsedUdpMsg.shts[0].hum,
+                        TempInternal = jsonpar.ParsedUdpMsg.shts[1].temp,
+                        HumInternal = jsonpar.ParsedUdpMsg.shts[1].hum,
+                        Pulse = jsonpar.ParsedUdpMsg.pulse,
+                        GSR = jsonpar.ParsedUdpMsg.gsr
+                    };
+                    OnNewTextReceived(args);
+                    sendlh.SendDataToLH(args);
+                }
+                catch (Exception ex)
+                {
+                    TextReceivedEventArgs args = new TextReceivedEventArgs
+                    {
+                        TextReceived = ex.Message
+                    };
+                    OnNewTextReceived(args);
+                }
             }
-            catch (Exception ex)
+            else
             {
                 TextReceivedEventArgs args = new TextReceivedEventArgs
                 {
-                    TextReceived = ex.Message
-                };
+                    TextReceived = jsonpar.ParsedUdpMsg
+            };
                 OnNewTextReceived(args);
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// <summary>   Publish data. </summary>
-        ///
-        /// <remarks>   Jordi Hutjens, 30-10-2018. </remarks>
-        ///
-        /// <param name="receivedByteMsg">  Message describing the received byte. </param>
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        private void PublishData(byte[] receivedByteMsg)
-        {
-            Socket sendingSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram,ProtocolType.Udp);
-            IPAddress sendToAddress = IPAddress.Parse(chkpar.ClientAddress);
-            IPEndPoint sendingEndPoint = new IPEndPoint(sendToAddress, chkpar.ClientPort);
-            sendingSocket.SendTo(receivedByteMsg, sendingEndPoint);
-        }
         #endregion
     }
 }

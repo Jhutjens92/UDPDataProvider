@@ -8,6 +8,7 @@ var searchData=
   ['mainwindowview_2examl_2ecs',['MainWindowView.xaml.cs',['../_main_window_view_8xaml_8cs.html',1,'']]],
   ['mainwindowviewmodel',['MainWindowViewModel',['../class_u_d_p_data_provider_1_1_view_model_1_1_main_window_view_model.html',1,'UDPDataProvider.ViewModel.MainWindowViewModel'],['../class_u_d_p_data_provider_1_1_view_model_1_1_main_window_view_model.html#a384c8fe7040d534c4e6201b905c55b3f',1,'UDPDataProvider.ViewModel.MainWindowViewModel.MainWindowViewModel()']]],
   ['mainwindowviewmodel_2ecs',['MainWindowViewModel.cs',['../_main_window_view_model_8cs.html',1,'']]],
+  ['mqttclient',['mqttClient',['../class_u_d_p_data_provider_1_1_classes_1_1_udp_manager.html#a4e84addbd0a5fa713383f3067b8ebf1e',1,'UDPDataProvider::Classes::UdpManager']]],
   ['myconnector_5fstartrecordingevent',['MyConnector_startRecordingEvent',['../class_u_d_p_data_provider_1_1_view_model_1_1_main_window_view_model.html#afe2c0de2ced8138772f2c1d79a317f05',1,'UDPDataProvider::ViewModel::MainWindowViewModel']]],
   ['myconnector_5fstoprecordingevent',['MyConnector_stopRecordingEvent',['../class_u_d_p_data_provider_1_1_view_model_1_1_main_window_view_model.html#a62fe0b2b2b002131f7d8dcb215ed1310',1,'UDPDataProvider::ViewModel::MainWindowViewModel']]]
 ];

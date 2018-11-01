@@ -24,7 +24,7 @@ namespace UDPDataProvider.Classes
         {
             get { return parsedUdpMsg; }
         }
-        private static dynamic parsedUdpMsg;
+        private dynamic parsedUdpMsg;
 
         #endregion
 
@@ -44,9 +44,11 @@ namespace UDPDataProvider.Classes
             {
                 parsedUdpMsg = JObject.Parse(receivedMessage);
             }
-            catch (Exception ex)
+            catch (Newtonsoft.Json.JsonReaderException ex)
             {
-                Console.WriteLine(ex.ToString());
+                string errorMessage = "Invalid JSON structure received. Exception: " + ex.Message;
+                parsedUdpMsg = errorMessage;
+                Globals.JsonErrorThrown = true;
             }
         }
         #endregion

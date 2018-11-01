@@ -18,7 +18,7 @@ namespace UDPDataProvider.ViewModel
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>   Method for setting IsRecordingUdp. </summary>
         ///
-        /// <value> True if this object is recording mqtt, false if not. </value>
+        /// <value> True if this object is recording Udp, false if not. </value>
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public static bool IsRecordingUdp
@@ -29,6 +29,26 @@ namespace UDPDataProvider.ViewModel
                 isRecordingUdp = value;
             }
         }
+
+        /// <summary>   True if is recording button is pressed. </summary>
         private static bool isRecordingUdp = false;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Method for setting JsonErrorThrown. </summary>
+        ///
+        /// <value> True if this object received an exception in JsonParser, false if not. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public static bool JsonErrorThrown
+        {
+            get { return jsonErrorThrown; }
+            set
+            {
+                jsonErrorThrown = value;
+            }
+        }
+
+        /// <summary> JSON error thrown bool </summary>
+        private static bool jsonErrorThrown = false;
     }
 }
