@@ -23,19 +23,20 @@ namespace UDPDataProvider.Classes
     class UdpManager
     {
         #region Instance declaration
-
-        CheckParameters chkpar = new CheckParameters();
-        JsonParser jsonpar = new JsonParser();
-        SendToLH sendlh = new SendToLH();
-        UdpClient udpClient;
-        MqttClient mqttClient;
-
+        MqttManager     mqttmanager = new MqttManager();
+        JsonParser      jsonpar     = new JsonParser();
+        SendToLH        sendlh      = new SendToLH();
+        MosquittoBroker msqbroker   = new MosquittoBroker();
+        UdpClient       udpClient;
         #endregion
 
         #region Variables
 
         /// <summary>   Message describing the received string. </summary>
-        string receivedStrMsg;
+        private string receivedStrMsg;
+
+        /// <summary>   Variable to check if all the clients are connected again after stopping recording. </summary>
+        private bool clientsCreated = false;
 
         #endregion
 
@@ -762,8 +763,10 @@ namespace UDPDataProvider.Classes
 
         public UdpManager()
         {
-            chkpar.CheckStartupParameters();
-            CreateServer();
+            CheckParameters.Instance.CheckStartupParameters();
+            msqbroker.CheckMosquittoBroker();
+            CreateClients();
+            mqttmanager.CreateMqttClient();
         }
 
         #endregion
@@ -781,55 +784,20 @@ namespace UDPDataProvider.Classes
         private void UDPServerCallback(IAsyncResult res)
         {
             byte[] receivedByteMsg;
-
-            IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, chkpar.ServerPort);
-            receivedByteMsg = udpClient.EndReceive(res, ref RemoteIpEndPoint);
-            receivedStrMsg = Encoding.UTF8.GetString(receivedByteMsg);
-            jsonpar.JSONParseReceivedMessage(receivedStrMsg);
-            UpdateValues();
-            NewUDPServerCallBack();
-        }
-
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// <summary>   Publish specific ESP data to the predefined topics using Mqtt/QoS 1. </summary>
-        ///
-        /// <remarks>   Jordi Hutjens, 26-10-2018. </remarks>
-        ///
-        /// <param name="e">    Containing the filtered received Mqtt text. </param>
-        ////////////////////////////////////////////////////////////////////////////////////////////////////  
-        private void PublishData(object sender, TextReceivedEventArgs e)
-        {
             try
             {
-                mqttClient.Publish("wekit/vest/GSR_Raw", Encoding.UTF8.GetBytes(e.GSR), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
-                mqttClient.Publish("wekit/vest/Pulse_Raw", Encoding.UTF8.GetBytes(e.Pulse), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
-                mqttClient.Publish("wekit/vest/Sht0_Temp", Encoding.UTF8.GetBytes(e.TempExternal), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
-                mqttClient.Publish("wekit/vest/Sht0_Hum", Encoding.UTF8.GetBytes(e.HumExternal), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
-                mqttClient.Publish("wekit/vest/Sht1_Temp", Encoding.UTF8.GetBytes(e.TempInternal), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
-                mqttClient.Publish("wekit/vest/Sht1_Hum", Encoding.UTF8.GetBytes(e.HumInternal), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
+                IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, CheckParameters.Instance.ServerPort);
+                receivedByteMsg = udpClient.EndReceive(res, ref RemoteIpEndPoint);
+                receivedStrMsg = Encoding.UTF8.GetString(receivedByteMsg);
+                jsonpar.JSONParseReceivedMessage(receivedStrMsg);
+                mqttmanager.PublishData();
+                UpdateValues();
+                NewUDPServerCallBack();
             }
-
-            catch (Exception ex)
+            catch (ObjectDisposedException ex)
             {
                 Console.WriteLine(ex.ToString());
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// <summary>   Creates the MQTT Client. </summary>
-        ///
-        /// <remarks>   Jordi Hutjens, 26-10-2018. </remarks>
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private void CreateMqttClient()
-        {
-            try
-            {
-                mqttClient = new MqttClient(chkpar.BrokerAddress);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine("Closed the socket.");
             }
         }
 
@@ -850,9 +818,12 @@ namespace UDPDataProvider.Classes
         /// <remarks>   Jordi Hutjens, 30-10-2018. </remarks>
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private void CreateServer()
+        private void CreateClients()
         {
-            udpClient = new UdpClient(chkpar.ServerPort);
+            udpClient = new UdpClient(CheckParameters.Instance.ServerPort);
+            mqttmanager.CreateMqttClient();
+            clientsCreated = true;
+
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -863,6 +834,10 @@ namespace UDPDataProvider.Classes
 
         public void UDPServerStart()
         {
+            if (!clientsCreated)
+            {
+                CreateClients();
+            }
             if (Globals.IsRecordingUdp)
             {
                 try
@@ -886,7 +861,9 @@ namespace UDPDataProvider.Classes
         {
             try
             {
+                clientsCreated = false;
                 udpClient.Close();
+                mqttmanager.CloseMqttConnection();
             }
             catch (Exception ex)
             {

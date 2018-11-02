@@ -171,6 +171,7 @@ namespace UDPDataProvider.ViewModel
         {
             if (Globals.IsRecordingUdp)
             {
+                Globals.IsRecordingUdp = false;
                 ButtonText = "Start Recording";
                 ButtonColor = new SolidColorBrush(Colors.White);
                 udpmanager.UDPServerStop();
@@ -219,6 +220,8 @@ namespace UDPDataProvider.ViewModel
             {
                 Process[] UdpDataProviderProcess = Process.GetProcessesByName("UDPDataProvider");
                 UdpDataProviderProcess[0].CloseMainWindow();
+                Process[] mosquittoBrokerProcess = Process.GetProcessesByName("mosquitto");
+                mosquittoBrokerProcess[0].CloseMainWindow();
             }
             catch (Exception ex)
             {

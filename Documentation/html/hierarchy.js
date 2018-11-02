@@ -3,6 +3,8 @@ var hierarchy =
     [ "Application", null, [
       [ "UDPDataProvider.App", "class_u_d_p_data_provider_1_1_app.html", null ],
       [ "UDPDataProvider.App", "class_u_d_p_data_provider_1_1_app.html", null ],
+      [ "UDPDataProvider.App", "class_u_d_p_data_provider_1_1_app.html", null ],
+      [ "UDPDataProvider.App", "class_u_d_p_data_provider_1_1_app.html", null ],
       [ "UDPDataProvider.App", "class_u_d_p_data_provider_1_1_app.html", null ]
     ] ],
     [ "UDPDataProvider.Classes.CheckParameters", "class_u_d_p_data_provider_1_1_classes_1_1_check_parameters.html", null ],
@@ -14,6 +16,8 @@ var hierarchy =
     ] ],
     [ "IComponentConnector", null, [
       [ "UDPDataProvider.MainWindowView", "class_u_d_p_data_provider_1_1_main_window_view.html", null ],
+      [ "UDPDataProvider.MainWindowView", "class_u_d_p_data_provider_1_1_main_window_view.html", null ],
+      [ "UDPDataProvider.MainWindowView", "class_u_d_p_data_provider_1_1_main_window_view.html", null ],
       [ "UDPDataProvider.MainWindowView", "class_u_d_p_data_provider_1_1_main_window_view.html", null ]
     ] ],
     [ "INotifyPropertyChanged", null, [
@@ -23,13 +27,19 @@ var hierarchy =
     ] ],
     [ "InternalTypeHelper", null, [
       [ "XamlGeneratedNamespace.GeneratedInternalTypeHelper", "class_xaml_generated_namespace_1_1_generated_internal_type_helper.html", null ],
+      [ "XamlGeneratedNamespace.GeneratedInternalTypeHelper", "class_xaml_generated_namespace_1_1_generated_internal_type_helper.html", null ],
+      [ "XamlGeneratedNamespace.GeneratedInternalTypeHelper", "class_xaml_generated_namespace_1_1_generated_internal_type_helper.html", null ],
       [ "XamlGeneratedNamespace.GeneratedInternalTypeHelper", "class_xaml_generated_namespace_1_1_generated_internal_type_helper.html", null ]
     ] ],
     [ "UDPDataProvider.Classes.JsonParser", "class_u_d_p_data_provider_1_1_classes_1_1_json_parser.html", null ],
+    [ "UDPDataProvider.Classes.MosquittoBroker", "class_u_d_p_data_provider_1_1_classes_1_1_mosquitto_broker.html", null ],
+    [ "UDPDataProvider.Classes.MqttManager", "class_u_d_p_data_provider_1_1_classes_1_1_mqtt_manager.html", null ],
     [ "UDPDataProvider.Classes.SendToLH", "class_u_d_p_data_provider_1_1_classes_1_1_send_to_l_h.html", null ],
     [ "UDPDataProvider.Classes.SetLHDescriptions", "class_u_d_p_data_provider_1_1_classes_1_1_set_l_h_descriptions.html", null ],
     [ "UDPDataProvider.Classes.UdpManager", "class_u_d_p_data_provider_1_1_classes_1_1_udp_manager.html", null ],
     [ "Window", null, [
+      [ "UDPDataProvider.MainWindowView", "class_u_d_p_data_provider_1_1_main_window_view.html", null ],
+      [ "UDPDataProvider.MainWindowView", "class_u_d_p_data_provider_1_1_main_window_view.html", null ],
       [ "UDPDataProvider.MainWindowView", "class_u_d_p_data_provider_1_1_main_window_view.html", null ],
       [ "UDPDataProvider.MainWindowView", "class_u_d_p_data_provider_1_1_main_window_view.html", null ],
       [ "UDPDataProvider.MainWindowView", "class_u_d_p_data_provider_1_1_main_window_view.html", null ]

@@ -6,10 +6,18 @@ using System.Threading.Tasks;
 
 namespace UDPDataProvider.Classes
 {
-    class CheckParameters
+    public sealed class CheckParameters
     {
         #region Variables
 
+
+        /// <summary>   Instance if CheckParameters. </summary>
+        private static CheckParameters instance = null;
+
+        /// <summary> The padlock for the Singleton Thread safe check. </summary>
+        private static readonly object padlock = new object();
+
+        
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>   method for getting the BrokerAddress variable. </summary>
         ///
@@ -21,18 +29,6 @@ namespace UDPDataProvider.Classes
         }
         private string brokerAddress;
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// <summary>   Gets or sets the client port./ </summary>
-        ///
-        /// <value> The client port. </value>
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public int ClientPort
-        {
-            get { return clientPort; }
-            set { clientPort = value; }
-        }
-        private int clientPort;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>   Gets or sets the server port. </summary>
@@ -47,28 +43,8 @@ namespace UDPDataProvider.Classes
         }
         private int serverPort;
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// <summary>   Gets or sets the client address. </summary>
-        ///
-        /// <value> The client address. </value>
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        public string ClientAddress
-        {
-            get { return clientAddress; }
-            set { clientAddress = value; }
-        }
-        private string clientAddress;
-
-
-        /// <summary>   True to cp par. </summary>
-        bool cpPar = false;
-
         /// <summary>   True to sp par. </summary>
         bool spPar = false;
-
-        /// <summary>   True to ca par. </summary>
-        bool caPar = false;
 
         /// <summary>   True to ba par. </summary>
         bool baPar = false;
@@ -76,6 +52,25 @@ namespace UDPDataProvider.Classes
         #endregion
 
         #region Method
+
+        CheckParameters()
+        {
+        }
+
+        public static CheckParameters Instance
+        {
+            get
+            {
+                lock (padlock)
+                {
+                    if (instance == null)
+                    {
+                        instance = new CheckParameters();
+                    }
+                    return instance;
+                }
+            }
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
@@ -90,23 +85,11 @@ namespace UDPDataProvider.Classes
             try
             {
                 string[] StartupPar = Environment.GetCommandLineArgs();
-                if (StartupPar.Any(s => s.Contains("-cp")))
-                {
-                    int ParIndex = Array.IndexOf(StartupPar, "-cp");
-                    clientPort = Convert.ToInt32(StartupPar[ParIndex + 1]);
-                    cpPar = true;
-                }
                 if (StartupPar.Any(s => s.Contains("-sp")))
                 {
                     int ParIndex = Array.IndexOf(StartupPar, "-sp");
                     serverPort = Convert.ToInt32(StartupPar[ParIndex + 1]);
                     spPar = true;
-                }
-                if (StartupPar.Any(s => s.Contains("-ca")))
-                {
-                    int ParIndex = Array.IndexOf(StartupPar, "-ca");
-                    clientAddress = StartupPar[ParIndex + 1];
-                    caPar = true;
                 }
                 if (StartupPar.Any(s => s.Contains("-ba")))
                 {
@@ -116,20 +99,10 @@ namespace UDPDataProvider.Classes
                 }
                 else
                 {
-                    if (!cpPar)
-                    {
-                        clientPort = 5006;
-                        Console.WriteLine("Starting with default client port (5005).");
-                    }
                     if (!spPar)
                     {
                         serverPort = 5005;
                         Console.WriteLine("Starting with default server port (5005).");
-                    }
-                    if (!caPar)
-                    {
-                        clientAddress = "127.0.0.1";
-                        Console.WriteLine("Starting with default client IP address (localhost).");
                     }
                     if (!baPar)
                     {

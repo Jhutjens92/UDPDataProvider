@@ -25,5 +25,6 @@ var searchData=
   ['imu2_5fq0',['IMU2_Q0',['../class_u_d_p_data_provider_1_1_classes_1_1_udp_manager_1_1_text_received_event_args.html#a79f6293b9818e2a14339349be8454966',1,'UDPDataProvider::Classes::UdpManager::TextReceivedEventArgs']]],
   ['imu2_5fq1',['IMU2_Q1',['../class_u_d_p_data_provider_1_1_classes_1_1_udp_manager_1_1_text_received_event_args.html#a51ac3498a0b602237eb1e90d3bcd4cf7',1,'UDPDataProvider::Classes::UdpManager::TextReceivedEventArgs']]],
   ['imu2_5fq2',['IMU2_Q2',['../class_u_d_p_data_provider_1_1_classes_1_1_udp_manager_1_1_text_received_event_args.html#a147da35d3483c835ef8c4736bf7d3897',1,'UDPDataProvider::Classes::UdpManager::TextReceivedEventArgs']]],
-  ['imu2_5fq3',['IMU2_Q3',['../class_u_d_p_data_provider_1_1_classes_1_1_udp_manager_1_1_text_received_event_args.html#ad73742b96a73414c109b9968dcf0d4b1',1,'UDPDataProvider::Classes::UdpManager::TextReceivedEventArgs']]]
+  ['imu2_5fq3',['IMU2_Q3',['../class_u_d_p_data_provider_1_1_classes_1_1_udp_manager_1_1_text_received_event_args.html#ad73742b96a73414c109b9968dcf0d4b1',1,'UDPDataProvider::Classes::UdpManager::TextReceivedEventArgs']]],
+  ['instance',['Instance',['../class_u_d_p_data_provider_1_1_classes_1_1_check_parameters.html#af4fa4bd2adc877ea6b6d27b4bc51c554',1,'UDPDataProvider::Classes::CheckParameters']]]
 ];

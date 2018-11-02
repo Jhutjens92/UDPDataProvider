@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['gsr',['gsr',['../class_u_d_p_data_provider_1_1_classes_1_1_udp_manager_1_1_text_received_event_args.html#a5bc9b66c2293cd926b94c6a312c93968',1,'UDPDataProvider::Classes::UdpManager::TextReceivedEventArgs']]]
+  ['filename1',['filename1',['../class_u_d_p_data_provider_1_1_classes_1_1_mosquitto_broker.html#af19f22402cbe5899f0a30ceff25dad7a',1,'UDPDataProvider::Classes::MosquittoBroker']]],
+  ['filename2',['filename2',['../class_u_d_p_data_provider_1_1_classes_1_1_mosquitto_broker.html#a429229ac168537f31f8260bf4f485e5e',1,'UDPDataProvider::Classes::MosquittoBroker']]]
 ];
