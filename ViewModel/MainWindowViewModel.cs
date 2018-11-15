@@ -197,16 +197,32 @@ namespace UDPDataProvider.ViewModel
 
         public MainWindowViewModel()
         {
+            CheckLearningHub();
+            if (CheckParameters.Instance.LHRunning)
+            {
+                HubConnector.StartConnection();
+                HubConnector.MyConnector.startRecordingEvent += MyConnector_startRecordingEvent;
+                HubConnector.MyConnector.stopRecordingEvent += MyConnector_stopRecordingEvent;
+                setlhdes.SetDescriptions();
+            }           
             udpmanager.NewUdpTextReceived += IUpdateTextBox;
-            HubConnector.StartConnection();
-            HubConnector.MyConnector.startRecordingEvent += MyConnector_startRecordingEvent;
-            HubConnector.MyConnector.stopRecordingEvent += MyConnector_stopRecordingEvent;
-            setlhdes.SetDescriptions();
             Application.Current.MainWindow.Closing += MainWindow_Closing;
         }
         #endregion
 
         #region Methods
+
+        /// <summary>   Check if the Learning Hub is running. </summary>
+        ///
+        /// <remarks>   Jordi Hutjens, 13-11-2018. </remarks>
+        private void CheckLearningHub()
+        {
+            Process[] LearningHub = Process.GetProcessesByName("HubDesktop");
+            if (LearningHub.Length > 0)
+            {
+                CheckParameters.Instance.LHRunning = true;
+            }
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>   Closes the application. </summary>

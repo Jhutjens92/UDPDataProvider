@@ -8,6 +8,7 @@ using UDPDataProvider.Classes;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 using System.Windows;
+using Newtonsoft.Json.Linq;
 
 namespace UDPDataProvider.Classes
 {
@@ -790,8 +791,8 @@ namespace UDPDataProvider.Classes
                 receivedByteMsg = udpClient.EndReceive(res, ref RemoteIpEndPoint);
                 receivedStrMsg = Encoding.UTF8.GetString(receivedByteMsg);
                 jsonpar.JSONParseReceivedMessage(receivedStrMsg);
-                mqttmanager.PublishData();
                 UpdateValues();
+                mqttmanager.PublishData();
                 NewUDPServerCallBack();
             }
             catch (ObjectDisposedException ex)
@@ -921,7 +922,10 @@ namespace UDPDataProvider.Classes
                         GSR = jsonpar.ParsedUdpMsg.gsr
                     };
                     OnNewTextReceived(args);
-                    sendlh.SendDataToLH(args);
+                    if (CheckParameters.Instance.LHRunning)
+                    {
+                        sendlh.SendDataToLH(args);
+                    }        
                 }
                 catch (Exception ex)
                 {

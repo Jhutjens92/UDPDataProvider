@@ -43,6 +43,16 @@ namespace UDPDataProvider.Classes
         }
         private int serverPort;
 
+        /// <summary>  Get or set if the Learning Hub is running. </summary>
+        ///
+        /// <value> True if the Learning Hub is running. </value>
+        public bool LHRunning
+        {
+            get { return lhRunning; }
+            set { lhRunning = value; }
+        }
+        private bool lhRunning;
+
         /// <summary>   True to sp par. </summary>
         bool spPar = false;
 
@@ -106,7 +116,7 @@ namespace UDPDataProvider.Classes
                     }
                     if (!baPar)
                     {
-                        brokerAddress = "localhost";
+                        brokerAddress = "127.0.0.1";
                         Console.WriteLine("Starting with default broker address (localhost).");
                     }
                 }
